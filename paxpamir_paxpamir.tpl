@@ -3,7 +3,7 @@
 <!-- 
 --------
 -- BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
--- paxpamir implementation : © <Your name here> <Your email address here>
+-- paxpamir implementation : © Jeff DiCorpo <jdicorpo@gmail.com>
 -- 
 -- This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
 -- See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -26,7 +26,20 @@
 -->
 
 
-This is your game interface. You can edit this HTML in your ".tpl" file.
+<div id="thething" class="thething">
+    <div id="board_wrapper" class="board_wrapper">
+    
+        <div id="board">
+            
+        </div>
+
+    </div>
+
+    <div id="player_area_wrapper">
+ 
+    </div>
+
+</div>
 
 
 <script type="text/javascript">

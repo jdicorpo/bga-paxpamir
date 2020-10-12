@@ -1,7 +1,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * paxpamir implementation : © <Your name here> <Your email address here>
+ * paxpamir implementation : © Jeff DiCorpo <jdicorpo@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -48,6 +48,39 @@
 
 /********* You can start writing your CSS below this line: **********/
 
+#thething {
+    position: relative;
+	margin: auto;
+    transform-origin: top left;
+	transition: transform 1000ms ease;
+	-webkit-transform: translateZ(0px);
+	transform: translateZ(0px);
+}
+
+.board_wrapper {
+    /* position: static; */
+    position: relative;
+    display: inline-block;
+	/* width: fit-content;  */
+	width: 100%; 
+    margin: auto;
+    vertical-align: middle;
+    /* text-align: justify; */
+    text-align-last: center;
+
+}
+
+#board {
+    /* width: 100%; */
+    width: 1054px;
+    height: 692px;
+    background-image: url('img/paxpamir_board.jpg');
+    /* background-color: palegoldenrod; */
+    position: relative;
+    /* margin-right: 0px; */
+    /* margin: auto; */
+    display: inline-block;
+}
 
 /*
     Example of CSS sprites (a black token and a white token, 20x20px each, embedded in the same "tokens.png" 40x20px image):

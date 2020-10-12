@@ -1,7 +1,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * paxpamir implementation : © <Your name here> <Your email address here>
+ * paxpamir implementation : © Jeff DiCorpo <jdicorpo@gmail.com>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -24,6 +24,9 @@ function (dojo, declare) {
     return declare("bgagame.paxpamir", ebg.core.gamegui, {
         constructor: function(){
             console.log('paxpamir constructor');
+
+            this.interface_max_width = 1500;
+            this.interface_max_height = 750;
               
             // Here, you can init the global variables of your user interface
             // Example:
@@ -63,6 +66,34 @@ function (dojo, declare) {
             this.setupNotifications();
 
             console.log( "Ending game setup" );
+        },
+
+        adaptViewportSize : function() {
+            var pageid = "page-content";
+            var nodeid = "thething";
+    
+            var bodycoords = dojo.marginBox(pageid);
+            var contentWidth = bodycoords.w;
+    
+            var browserZoomLevel = window.devicePixelRatio; 
+            // console.log("zoom",browserZoomLevel);
+            // console.log("contentWidth", contentWidth);
+
+            // if (contentWidth >= this.interface_max_width || browserZoomLevel >1  || this.control3dmode3d) {
+            if (contentWidth >= interface_max_width || this.control3dmode3d) {
+            // if (this.large_screen || this.control3dmode3d) {
+                dojo.style(nodeid,'transform','');
+                dojo.style(nodeid,'-webkit-transform','');
+                // console.log("contentWidth", contentWidth, '>', board_width);
+                return;
+            }
+    
+            var scale_percent = contentWidth / interface_max_width;
+            // console.log("scale = ", scale_percent);
+
+            dojo.style(nodeid, "transform", "scale(" + scale_percent + ")");
+            dojo.style(nodeid, "-webkit-transform", "scale(" + scale_percent + ")");
+
         },
        
 
