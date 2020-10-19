@@ -29,8 +29,21 @@
 <div id="thething" class="thething">
     <div id="board_wrapper" class="board_wrapper">
     
+        <div id="market" class="market">
+            <!-- BEGIN market_card -->
+            <div id="market_{ROW}_{COL}" class="card market_card" style="left:{LEFT}px; top:{TOP}px;">
+                <div id="market_rupees_{ROW}_{COL}" class="market_rupees"></div>
+            </div>
+            <!-- END market_card -->
+        </div>
         <div id="board">
-            
+            <!-- BEGIN region -->
+            <div id="{ID}" class="region" style="left:{LEFT}px; top:{TOP}px; width:{WIDTH}px; height:{HEIGHT}px;"></div>
+            <!-- END region -->
+            <!-- BEGIN border -->
+            <div id="{ID}" class="border" style="left:{LEFT}px; top:{TOP}px; width:{WIDTH}px; height:{HEIGHT}px;"></div>
+            <!-- END border -->
+            <div id="british_army"></div>
         </div>
 
     </div>

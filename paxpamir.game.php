@@ -18,6 +18,7 @@
 
 
 require_once( APP_GAMEMODULE_PATH.'module/table/table.game.php' );
+require_once ('modules/tokens.php');
 
 
 class paxpamir extends Table
@@ -40,6 +41,13 @@ class paxpamir extends Table
             //    "my_second_game_variant" => 101,
             //      ...
         ) );        
+
+        $this->tokens = new Tokens();
+        // $this->tokens->initGlobalIndex('GINDEX', 0);
+
+        // $this->cards = self::getNew( "module.common.deck" );
+        // $this->cards->init("cards");
+
 	}
 	
     protected function getGameName( )
@@ -79,6 +87,9 @@ class paxpamir extends Table
         
         /************ Start the game initialization *****/
 
+        $this->tokens->createTokensPack("card_{INDEX}", "deck", 116);
+        $this->tokens->shuffle("deck");
+
         // Init global values with their initial values
         //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
         
@@ -88,7 +99,8 @@ class paxpamir extends Table
         //self::initStat( 'player', 'player_teststat1', 0 );  // Init a player statistics (for all players)
 
         // TODO: setup the initial game situation here
-       
+        $this->tokens->pickTokensForLocation(6, 'deck', 'market_top');
+        $this->tokens->pickTokensForLocation(6, 'deck', 'market_bottom');
 
         // Activate first player (which is in general a good idea :) )
         $this->activeNextPlayer();
@@ -105,6 +117,7 @@ class paxpamir extends Table
         _ when the game starts
         _ when a player refreshes the game page (F5)
     */
+
     protected function getAllDatas()
     {
         $result = array();
@@ -115,8 +128,22 @@ class paxpamir extends Table
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
         $sql = "SELECT player_id id, player_score score FROM player ";
         $result['players'] = self::getCollectionFromDb( $sql );
-  
+
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
+  
+        $result['token_types'] = $this->token_types;
+        $result['cards'] = array();
+
+        foreach ($this->token_types as $key => $value) {
+            if ($this->startsWith($value['type'], 'card')) {
+                $result['cards'][] = $key;
+            }
+        }
+        $result['deck'] = $this->tokens->getTokensOfTypeInLocation(null, 'deck');
+        $result['market'][0] = $this->tokens->getTokensOnTop(6, 'market_top');
+        // $result['market']['top'] = $this->tokens->getTokensOfTypeInLocation(null, 'market_top');
+        $result['market'][1] = $this->tokens->getTokensOnTop(6, 'market_bottom');
+        // $result['market']['bottom'] = $this->tokens->getTokensOfTypeInLocation(null, 'market_bottom');
   
         return $result;
     }
@@ -147,6 +174,11 @@ class paxpamir extends Table
         In this space, you can put any utility methods useful for your game logic
     */
 
+    function startsWith ($string, $startString) 
+    { 
+        $len = strlen($startString); 
+        return (substr($string, 0, $len) === $startString); 
+    } 
 
 
 //////////////////////////////////////////////////////////////////////////////

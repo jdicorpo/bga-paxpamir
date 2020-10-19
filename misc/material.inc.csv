@@ -1,0 +1,143 @@
+element_id|element_name|element_type|region|suit|rank|impact|actions|special|prize|patriot|element_description|
+deck|Deck|deck {'loc'=>2,'content'=>0,'counter'=>1 }|||||||||Player's Card Deck|
+discard|Discard|discard {'loc'=>2,'content'=>1,'counter'=>1 }|||||||||Player's Discard Pile|Click to inspect
+hand||hand {'loc'=>2,'content'=>2,'counter'=>1 }||||||||||
+transcaspia|Transcaspia|region {'left' => 100, 'top' => 100, 'width' => 270, 'height' => 220, 'borders' => 'persia, herat, kabul'}||||||||||
+kabul|Kabul|region {'left' => 500, 'top' => 100, 'width' => 300, 'height' => 200, 'borders' => 'transcaspia, herat, kandahar, punjab'}||||||||||
+persia|Persia|region {'left' => 100, 'top' => 400, 'width' => 180, 'height' => 200, 'borders' => 'transcaspia, herat'}||||||||||
+herat|Persia|region {'left' => 330, 'top' => 370, 'width' => 200, 'height' => 230, 'borders' => 'persia, transcaspia, kabul, kandahar'}||||||||||
+kandahar|Kandahar|region {'left' => 600, 'top' => 400, 'width' => 200, 'height' => 200, 'borders' => 'herat, kabul, punjab'}||||||||||
+punjab|Punjab|region {'left' => 860, 'top' => 280, 'width' => 100, 'height' => 320, 'borders' => 'kabul, kandahar'}||||||||||
+border_transcaspia_kabul|Transcaspia-Kabul Border|border {'left' => 410, 'top' => 100, 'width' => 75, 'height' => 200, 'regions' => 'transcaspia, kabul'}||||||||||
+border_transcaspia_herat|Transcaspia-Kabul Border|border {'left' => 860, 'top' => 280, 'width' => 100, 'height' => 320, 'regions' => 'transcaspia, herat'}||||||||||
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Insurrection|special|||||||||After resolving a Dominance Check, place two Afghan armies in Kabul.|
+|Claim of Ancient Lineage|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
+|Mohan Lal|card court_card|kabul|intelligence|3|s,s,s|mv|1|ru|||
+|Jan-Fishan Khan|card court_card|kabul|intelligence|2|s,s,a,fm|ba,mv||ru|||
+|Prince Akbar Khan|card court_card|kabul|intelligence|2|s,s,a|ba|2||||
+|Charles Stoddart|card court_card|kabul|intelligence||||||||
+|Shah Shujah Durrani|card court_card|kabul|political||||||||
+|Aminullah Khan Logari|card court_card|kabul|political||||||||
+|Dost Mohammad|card court_card|kabul|political||||||||
+|Kabul Bazaar|card court_card|kabul|economic||||||||
+|Afghan Handicrafts|card court_card|kabul|economic||||||||
+|Balkh Arsenic Mine|card court_card|kabul|economic||||||||
+|Lapis Lazuli Mine|card court_card|kabul|economic||||||||
+|City of Ghazni|card court_card|kabul|economic||||||||
+|Ghilzai Nomads|card court_card|kabul|economic||||||||
+|Money Lenders|card court_card|kabul|economic||||||||
+|Durrani Royal Guard|card court_card|kabul|military||||||||
+|Bala Hissar|card court_card|kabul|military||||||||
+|Citadel of Ghazni|card court_card|kabul|military||||||||
+|Harry Flashman|card court_card|punjab|intelligence||1||||||
+|Eldred Pottinger|card court_card|punjab|intelligence||1||||||
+|Henry Rawlinson|card court_card|punjab|intelligence||1||||||
+|Alexander Burnes|card court_card|punjab|intelligence||2||||||
+|George Hayward|card court_card|punjab|intelligence||1||||||
+|Henry Pottinger|card court_card|punjab|intelligence||1||||||
+|Ranjit Singh|card court_card|punjab|political|2|||||||
+|Josiah Harlan|card court_card|punjab|political|1|||||||
+|Paolo Avitabile|card court_card|punjab|political|1|||||||
+|Maqpon Dynasty|card court_card|punjab|political|1|||||||
+|Anarkali Bazaar|card court_card|punjab|economic|1|||||||
+|Khyber Pass|card court_card|punjab|economic|2|||||||
+|Sikh Merchants in Lahore|card court_card|punjab|economic|1|||||||
+|Company Weapons|card court_card|punjab|military|1|||||||
+|Army of the Indus|card court_card|punjab|military|3|||||||
+|Zorawar Singh Kahluria|card court_card|punjab|military|2|||||||
+|Sindhi Warriors|card court_card|punjab|military|1|||||||
+|Hari Singh Nalwa|card court_card|punjab|military|2|||||||
+|Bengal Native Infantry|card court_card|punjab|military|1|||||||
+|Seaforth Highlanders|card court_card|punjab|military|1|||||||
+|Akali Sikhs|card court_card|punjab|military|2|||||||
+|William Moorcroft|card court_card|kandahar|intelligence|1|||||||
+|William Hay Macnaghten|card court_card|kandahar|intelligence|2|||||||
+|Charles Masson|card court_card|kandahar|intelligence|2|||||||
+|Barakzai Sadars|card court_card|kandahar|political|1|||||||
+|Giljee Nobles|card court_card|kandahar|political|1|||||||
+|Baluchi Chiefs|card court_card|kandahar|political|1|||||||
+|Haji Khan Kakar|card court_card|kandahar|political|1|||||||
+|Bank|card court_card|kandahar|economic|2|||||||
+|Bolan Pass|card court_card|kandahar|economic|2|||||||
+|Fruit Markets|card court_card|kandahar|economic|1|||||||
+|Kandahari Markets|card court_card|kandahar|economic|1|||||||
+|British Regulars|card court_card|kandahar|military|2|||||||
+|Sir John Keane|card court_card|kandahar|military|1|||||||
+|Pashtun Mercenary|card court_card|kandahar|military|1|||||||
+|Jezail Sharpshooters|card court_card|kandahar|military|2|||||||
+|Herati Bandits|card court_card|herat|intelligence|1|||||||
+|Hazara Chiefs|card court_card|herat|political|1|||||||
+|Yar Mohammad Alikozai|card court_card|herat|political|2|||||||
+|Exiled Durrani Nobility|card court_card|herat|political|1|||||||
+|Ishaqzai Chiefs|card court_card|herat|political|1|||||||
+|Tajik Warband|card court_card|herat|military|2|||||||
+|Nomadic Warlord|card court_card|herat|military|1|||||||
+|Karakul Sheep|card court_card|herat|economic|2|||||||
+|Qanat System|card court_card|herat|economic|1|||||||
+|Farah Road|card court_card|herat|economic|3|||||||
+|Opium Fields|card court_card|herat|economic|2|||||||
+|Minaret of Jam|card court_card|herat|economic|1|||||||
+|Baluchi Smugglers|card court_card|herat|economic|2|||||||
+|Wheat Fields|card court_card|herat|economic|2|||||||
+|Ghaem Magham Farahani|card court_card|persia|intelligence|2|||||||
+|Count Ivan Simonich|card court_card|persia|intelligence|2|||||||
+|Alexander Griboyedov|card court_card|persia|intelligence|2|||||||
+|Joseph Wolf|card court_card|persia|intelligence|1|||||||
+|Claude Wade|card court_card|persia|intelligence|2|||||||
+|Jean-François Allard|card court_card|persia|intelligence|1|||||||
+|Hajj Mirza Aghasi|card court_card|persia|political|1|||||||
+|Abbas Mirza|card court_card|persia|political|1|||||||
+|Fath-Ali Shah|card court_card|persia|political|2|||||||
+|Mohammad Shah|card court_card|persia|political|1|||||||
+|Civic Improvements|card court_card|persia|economic|2|||||||
+|Persian Slave Markets|card court_card|persia|economic|1|||||||
+|Anglo-Persian Trade|card court_card|persia|economic|1|||||||
+|Russo-Persian Trade|card court_card|persia|economic|2|||||||
+|Persian Army|card court_card|persia|military|2|||||||
+|Shah’s Guard|card court_card|persia|military|1|||||||
+|Russian Regulars|card court_card|persia|military|2|||||||
+|Bukharan Jews|card court_card|transcaspia|intelligence|1|||||||
+|Jan Prosper Witkiewicz|card court_card|transcaspia|intelligence|2|||||||
+|Imperial Surveyors|card court_card|transcaspia|intelligence|1|||||||
+|Arthur Conolly|card court_card|transcaspia|intelligence|1|||||||
+|Aga Mehdi|card court_card|transcaspia|intelligence|1|||||||
+|Nasrullah Khan|card court_card|transcaspia|political|1|||||||
+|Allah Quli Bahadur|card court_card|transcaspia|political|1|||||||
+|Mir Murad Beg|card court_card|transcaspia|political|1|||||||
+|Madali Khan|card court_card|transcaspia|political|2|||||||
+|Khivan Slave Markets|card court_card|transcaspia|economic|1|||||||
+|Supplies from Orenburg|card court_card|transcaspia|economic|1|||||||
+|Panjdeh Oasis|card court_card|transcaspia|economic|2|||||||
+|The Ark of Bukhara|card court_card|transcaspia|military|1|||||||
+|European Cannons|card court_card|transcaspia|military|3|||||||
+|Cossacks|card court_card|transcaspia|military|1|||||||
+|Count Perovsky|card court_card|transcaspia|military|2|||||||
+|Dominance Check|card event_card||||||||||
+|Dominance Check|card event_card||||||||||
+|Dominance Check|card event_card||||||||||
+|Dominance Check|card event_card||||||||||
+|Event Card|card event_card {'discarded' => 'Favor Military', 'purchased' => 'New Tactics'}||||||||||
+|Event Card|card event_card {'discarded' => 'Embarrassment of Riches', 'purchased' => 'Koh-i-noor Recovered'}||||||||||
+|Event Card|card event_card {'discarded' => 'Disregard for Customs', 'purchased' => 'Courtly Manners'}||||||||||
+|Event Card|card event_card {'discarded' => 'Failure to Impress', 'purchased' => 'Rumor'}||||||||||
+|Event Card|card event_card {'discarded' => 'Riots in Punjab', 'purchased' => 'Conflict Fatigue'}||||||||||
+|Event Card|card event_card {'discarded' => 'Riots in Herat', 'purchased' => 'Nationalism'}||||||||||
+|Event Card|card event_card {'discarded' => 'No Effect', 'purchased' => 'Public Withdrawal'}||||||||||
+|Event Card|card event_card {'discarded' => 'Riots in Kabul', 'purchased' => 'Nation Building'}||||||||||
+|Event Card|card event_card {'discarded' => 'Riots in Persia', 'purchased' => 'Backing of Persian Aristocracy'}||||||||||
+|Event Card|card event_card {'discarded' => 'Confidence Failure', 'purchased' => 'Other Persuasive Methods'}||||||||||
+|Event Card|card event_card {'discarded' => 'Favor Intelligence', 'purchased' => 'Pashtunwali Values'}||||||||||
+|Event Card|card event_card {'discarded' => 'Favor Political', 'purchased' => 'Rebuke'}||||||||||

@@ -18,7 +18,9 @@
 define([
     "dojo","dojo/_base/declare",
     "ebg/core/gamegui",
-    "ebg/counter"
+    "ebg/counter",
+    "ebg/stock",
+    "ebg/zone",
 ],
 function (dojo, declare) {
     return declare("bgagame.paxpamir", ebg.core.gamegui, {
@@ -27,7 +29,11 @@ function (dojo, declare) {
 
             this.interface_max_width = 1500;
             this.interface_max_height = 750;
+
+            this.cardwidth = 179;
+            this.cardheight = 251;
               
+            this.market = [];
             // Here, you can init the global variables of your user interface
             // Example:
             // this.myGlobalValue = 0;
@@ -61,6 +67,19 @@ function (dojo, declare) {
             
             // TODO: Set up your game interface here, according to "gamedatas"
             
+            for ( var row = 0; row <= 1; row++ ) {
+                this.market[row] = [];
+                for (var col = 0; col <= 5; col++) {
+                    var id = 'market_'+row+'_'+col;
+                    this.market[row][col] = new ebg.stock();
+                    this.market[row][col].create( this, $(id), this.cardwidth, this.cardheight);
+                    this.market[row][col].image_items_per_row = 12;
+                    for (var c in gamedatas.cards) {
+                        this.market[row][col].addItemType(gamedatas.cards[c], 1, g_gamethemeurl + 'img/cards.jpg', gamedatas.cards[c].split('_')[1] -1);
+                    }
+                    this.placeCard(this.market[row][col], gamedatas.market[row][col].key);
+                }
+            }
  
             // Setup game notifications to handle (see "setupNotifications" method below)
             this.setupNotifications();
@@ -188,6 +207,19 @@ function (dojo, declare) {
             script.
         
         */
+
+        placeCard : function(location, id) {
+            console.log( 'placeCard' );
+
+            // var idx = this.gamedatas.flood_list[id].img_id
+            // var tooltip = this.gamedatas.flood_list[id].name;
+
+            location.addToStockWithId(id, id);
+            // location.addToStockWithId(id, id, this.flood_deck);
+
+            // this.addTooltip( this.flood_card_area.getItemDivId(id), tooltip, '' );
+
+        },
 
 
         ///////////////////////////////////////////////////

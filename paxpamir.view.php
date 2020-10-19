@@ -44,6 +44,52 @@
 
         $template = self::getTemplateName();
 
+        $this->page->begin_block($template, "market_card" );
+
+        $hor_scale = 179+21;
+        $ver_scale = 251+15;
+
+        for( $x=0; $x<=5; $x++ )
+        {
+          for( $y=0; $y<=1; $y++ )
+          {
+            $this->page->insert_block( "market_card", array(
+              'ROW' => $y,
+              'COL' => $x,
+              'LEFT' => round( $x*$hor_scale )+ 28,
+              'TOP' => round( $y*$ver_scale ) + 74,
+            ) );
+          }
+        }
+
+        $this->page->begin_block($template, "region" );
+
+        foreach ($this->game->token_types as $token => $token_info) {
+          if ($token_info['type'] == 'region') {
+            $this->page->insert_block( "region", array(
+              'ID' => $token,
+              'LEFT' => $token_info['left'],
+              'TOP' => $token_info['top'],
+              'WIDTH' => $token_info['width'],
+              'HEIGHT' => $token_info['height'],
+            ) );
+          }
+        };
+
+        $this->page->begin_block($template, "border" );
+
+        foreach ($this->game->token_types as $token => $token_info) {
+          if ($token_info['type'] == 'border') {
+            $this->page->insert_block( "border", array(
+              'ID' => $token,
+              'LEFT' => $token_info['left'],
+              'TOP' => $token_info['top'],
+              'WIDTH' => $token_info['width'],
+              'HEIGHT' => $token_info['height'],
+            ) );
+          }
+        };
+
         /*
         
         // Examples: set the value of some element defined in your tpl file like this: {MY_VARIABLE_ELEMENT}
