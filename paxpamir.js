@@ -34,9 +34,9 @@ function (dojo, declare) {
             this.cardheight = 251;
               
             this.market = [];
-            // Here, you can init the global variables of your user interface
-            // Example:
-            // this.myGlobalValue = 0;
+
+            this.clientStateArgs = {};
+            this.handles = [];
 
         },
         
@@ -74,6 +74,9 @@ function (dojo, declare) {
                     this.market[row][col] = new ebg.stock();
                     this.market[row][col].create( this, $(id), this.cardwidth, this.cardheight);
                     this.market[row][col].image_items_per_row = 12;
+                    this.market[row][col].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem card market_card\" \
+                        style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
+                        background-image:url('${image}');\"></div>";
                     for (var c in gamedatas.cards) {
                         this.market[row][col].addItemType(gamedatas.cards[c], 1, g_gamethemeurl + 'img/cards.jpg', gamedatas.cards[c].split('_')[1] -1);
                     }
@@ -128,18 +131,10 @@ function (dojo, declare) {
             
             switch( stateName )
             {
-            
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Show some HTML block at this game state
-                dojo.style( 'my_html_block_id', 'display', 'block' );
-                
+            case 'playerActions':
+                this.remaining_actions = args.args.remaining_actions;
                 break;
-           */
-           
-           
+            
             case 'dummmy':
                 break;
             }
@@ -155,17 +150,6 @@ function (dojo, declare) {
             switch( stateName )
             {
             
-            /* Example:
-            
-            case 'myGameState':
-            
-                // Hide the HTML block we are displaying only during this game state
-                dojo.style( 'my_html_block_id', 'display', 'none' );
-                
-                break;
-           */
-           
-           
             case 'dummmy':
                 break;
             }               
@@ -182,18 +166,27 @@ function (dojo, declare) {
             {            
                 switch( stateName )
                 {
-/*               
-                 Example:
- 
-                 case 'myGameState':
-                    
-                    // Add 3 action buttons in the action status bar:
-                    
-                    this.addActionButton( 'button_1_id', _('Button 1 label'), 'onMyMethodToCall1' ); 
-                    this.addActionButton( 'button_2_id', _('Button 2 label'), 'onMyMethodToCall2' ); 
-                    this.addActionButton( 'button_3_id', _('Button 3 label'), 'onMyMethodToCall3' ); 
-                    break;
-*/
+                    case 'playerActions':
+                        var main = $('pagemaintitletext');
+                        if (args.remaining_actions > 0) {
+                            main.innerHTML += _(' may take ') + '<span id="remaining_actions_value" style="font-weight:bold;color:#ED0023;">' 
+                                + args.remaining_actions + '</span>' + _(' action(s): ');
+                            this.addActionButton( 'purchase_btn', _('Purchase'), 'onPurchase' );
+                            this.addActionButton( 'play_btn', _('Play'), 'onPlay' );
+                            this.addActionButton( 'card_action_btn', _('Card Action'), 'onCardAction' );
+                            this.addActionButton( 'pass_btn', _('End Turn'), 'onPass', null, false, 'gray' ); 
+                        } else {
+                            main.innerHTML += _(' have ') + '<span id="remaining_actions_value" style="font-weight:bold;color:#ED0023;">' 
+                            + args.remaining_actions + '</span>' + _(' remaining actions: ');
+
+                            this.addActionButton( 'pass_btn', _('End Turn'), 'onPass', null, false, 'blue' );
+                        }
+                        break;
+
+                    case 'client_confirmPurchase':
+                        this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'blue' );
+                        this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
+                        break;
                 }
             }
         },        
@@ -214,10 +207,41 @@ function (dojo, declare) {
             // var idx = this.gamedatas.flood_list[id].img_id
             // var tooltip = this.gamedatas.flood_list[id].name;
 
-            location.addToStockWithId(id, id);
+            location.addToStockWithId(id, id, 'deck');
             // location.addToStockWithId(id, id, this.flood_deck);
 
             // this.addTooltip( this.flood_card_area.getItemDivId(id), tooltip, '' );
+
+        },
+
+        updatePossibleCards: function() {
+
+            this.clearLastAction();
+
+            dojo.query('.market_card').forEach(
+                function (node, index) {
+                    dojo.addClass(node, 'possibleCard');
+                    this.handles.push(dojo.connect(node,'onclick', this, 'onMarketCard'));
+                }, this);
+
+        },
+
+        clearLastAction : function( )
+        {
+            console.log( 'clearLastAction, handles = ' + this.handles.length );
+
+            // Remove current possible moves
+            dojo.query( '.possibleMove' ).removeClass( 'possibleMove' );
+            dojo.query( '.otherPlayer' ).removeClass( 'otherPlayer' );
+            dojo.query( '.possibleCard' ).removeClass( 'possibleCard' );
+            dojo.query( '.possiblePlayer' ).removeClass( 'possiblePlayer' );
+            dojo.query( '.possiblePawn' ).removeClass( 'possiblePawn' );
+            dojo.query( '.selected' ).removeClass( 'selected' );
+            dojo.query( '.selectedPawn' ).removeClass( 'selectedPawn' );
+            dojo.query( '.fadeTile' ).removeClass( 'fadeTile' );
+
+            dojo.forEach(this.handles, dojo.disconnect);
+            this.handles = [];
 
         },
 
@@ -235,41 +259,96 @@ function (dojo, declare) {
             _ make a call to the game server
         
         */
-        
-        /* Example:
-        
-        onMyMethodToCall1: function( evt )
+
+        onPurchase: function()
         {
-            console.log( 'onMyMethodToCall1' );
-            
-            // Preventing default browser reaction
-            dojo.stopEvent( evt );
+            if (! this.checkAction('purchase'))
+            return;
 
-            // Check that this action is possible (see "possibleactions" in states.inc.php)
-            if( ! this.checkAction( 'myAction' ) )
-            {   return; }
-
-            this.ajaxcall( "/paxpamir/paxpamir/myAction.html", { 
-                                                                    lock: true, 
-                                                                    myArgument1: arg1, 
-                                                                    myArgument2: arg2,
-                                                                    ...
-                                                                 }, 
-                         this, function( result ) {
-                            
-                            // What to do after the server call if it succeeded
-                            // (most of the time: nothing)
-                            
-                         }, function( is_error) {
-
-                            // What to do after the server call in anyway (success or failure)
-                            // (most of the time: nothing)
-
-                         } );        
-        },        
+            if( this.isCurrentPlayerActive() )
+            {       
+                console.log( 'onPurchase' );
+                this.updatePossibleCards();
+                // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
+                    // lock: true,
+                // }, this, function( result ) {} );
+            }
+        }, 
         
-        */
+        onPlay: function()
+        {
+            if (! this.checkAction('play'))
+            return;
 
+            if( this.isCurrentPlayerActive() )
+            {       
+                console.log( 'onPlay' );
+                // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
+                    // lock: true,
+                // }, this, function( result ) {} );
+            }
+        }, 
+
+        onCardAction: function()
+        {
+            if (! this.checkAction('card_action'))
+            return;
+
+            if( this.isCurrentPlayerActive() )
+            {       
+                console.log( 'onCardAction' );
+                // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
+                    // lock: true,
+                // }, this, function( result ) {} );
+            }
+        }, 
+
+        onPass: function()
+        {
+            if (! this.checkAction('pass'))
+            return;
+
+            if( this.isCurrentPlayerActive() )
+            {       
+                console.log( 'onPass' );
+                // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
+                    // lock: true,
+                // }, this, function( result ) {} );
+            }
+        }, 
+
+        onMarketCard: function( evt )
+        {
+            var card_id = evt.currentTarget.id;
+            dojo.stopEvent( evt );
+            console.log( 'onMarketCard ' + card_id );
+
+            this.selectedCard = card_id;
+
+            if( this.isCurrentPlayerActive() )
+            {       
+                this.clearLastAction();
+                var node = $( card_id );
+                dojo.addClass(node, 'selected');
+                var cost = card_id.split('_')[2];
+                this.setClientState("client_confirmPurchase", { descriptionmyturn : "Purchase this card for "+cost+" rupees?"});
+            }
+        }, 
+
+        onCancel: function()
+        {
+            console.log( 'onCancel' );
+            this.clearLastAction();
+            this.restoreServerGameState();
+        }, 
+
+        onConfirm: function()
+        {
+            console.log( 'onConfirm' );
+            this.clearLastAction();
+            this.restoreServerGameState();
+        }, 
+        
         
         ///////////////////////////////////////////////////
         //// Reaction to cometD notifications

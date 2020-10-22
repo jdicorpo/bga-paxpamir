@@ -39,6 +39,8 @@
   	    // Get players & players number
         $players = $this->game->loadPlayersBasicInfos();
         $players_nbr = count( $players );
+        global $g_user;
+        $cplayer = $g_user->get_id();
 
         /*********** Place your code below:  ************/
 
@@ -57,7 +59,7 @@
               'ROW' => $y,
               'COL' => $x,
               'LEFT' => round( $x*$hor_scale )+ 28,
-              'TOP' => round( $y*$ver_scale ) + 74,
+              'TOP' => round( $y*$ver_scale ) + 77,
             ) );
           }
         }
@@ -90,43 +92,22 @@
           }
         };
 
-        /*
+        $this->page->begin_block($template, "player");
         
-        // Examples: set the value of some element defined in your tpl file like this: {MY_VARIABLE_ELEMENT}
-
-        // Display a specific number / string
-        $this->tpl['MY_VARIABLE_ELEMENT'] = $number_to_display;
-
-        // Display a string to be translated in all languages: 
-        $this->tpl['MY_VARIABLE_ELEMENT'] = self::_("A string to be translated");
-
-        // Display some HTML content of your own:
-        $this->tpl['MY_VARIABLE_ELEMENT'] = self::raw( $some_html_code );
-        
-        */
-        
-        /*
-        
-        // Example: display a specific HTML block for each player in this game.
-        // (note: the block is defined in your .tpl file like this:
-        //      <!-- BEGIN myblock --> 
-        //          ... my HTML code ...
-        //      <!-- END myblock --> 
-        
-
-        $this->page->begin_block( "paxpamir_paxpamir", "myblock" );
-        foreach( $players as $player )
-        {
-            $this->page->insert_block( "myblock", array( 
-                                                    "PLAYER_NAME" => $player['player_name'],
-                                                    "SOME_VARIABLE" => $some_value
-                                                    ...
-                                                     ) );
+        if (isset($players [$cplayer])) { // may be not set if spectator
+            $player_id = $cplayer;
+        } else {
+            $player_id = $this->game->getNextPlayerTable()[0];
         }
-        
-        */
 
-
+        for ($x = 0; $x < $players_nbr; $x++) {
+            $this->page->insert_block("player", array (
+                "PLAYER_ID" => $player_id,
+                "PLAYER_NAME" => $players[$player_id]['player_name'],
+                "PLAYER_COLOR" => $players[$player_id]['player_color']
+            ));            
+            $player_id = $this->game->getPlayerAfter($player_id);
+        }
 
         /*********** Do not change anything below this line  ************/
   	}

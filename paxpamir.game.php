@@ -34,6 +34,8 @@ class paxpamir extends Table
         parent::__construct();
         
         self::initGameStateLabels( array( 
+            "remaining_actions" => 10,
+
             //    "my_first_global_variable" => 10,
             //    "my_second_global_variable" => 11,
             //      ...
@@ -91,7 +93,7 @@ class paxpamir extends Table
         $this->tokens->shuffle("deck");
 
         // Init global values with their initial values
-        //self::setGameStateInitialValue( 'my_first_global_variable', 0 );
+        self::setGameStateInitialValue( 'remaining_actions', 2 );
         
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
@@ -227,22 +229,12 @@ class paxpamir extends Table
         game state.
     */
 
-    /*
-    
-    Example for game state "MyGameState":
-    
-    function argMyGameState()
+    function argPlayerActions()
     {
-        // Get some values from the current game situation in database...
-    
-        // return values:
         return array(
-            'variable1' => $value1,
-            'variable2' => $value2,
-            ...
+            'remaining_actions' => $this->getGameStateValue("remaining_actions"),
         );
-    }    
-    */
+    }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state actions

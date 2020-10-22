@@ -29,12 +29,16 @@
 <div id="thething" class="thething">
     <div id="board_wrapper" class="board_wrapper">
     
-        <div id="market" class="market">
-            <!-- BEGIN market_card -->
-            <div id="market_{ROW}_{COL}" class="card market_card" style="left:{LEFT}px; top:{TOP}px;">
-                <div id="market_rupees_{ROW}_{COL}" class="market_rupees"></div>
+        <div id="market_wrapper" class="market_wrapper">
+            <div id="market" class="market">
+                <!-- BEGIN market_card -->
+                <div id="market_{ROW}_{COL}" class="card" style="left:{LEFT}px; top:{TOP}px;">
+                    <div id="market_rupees_{ROW}_{COL}" class="market_rupees"></div>
+                </div>
+                <!-- END market_card -->
+                <div id="deck" class="card"></div>
+                <div id="discard" class="card"></div>
             </div>
-            <!-- END market_card -->
         </div>
         <div id="board">
             <!-- BEGIN region -->
@@ -44,12 +48,35 @@
             <div id="{ID}" class="border" style="left:{LEFT}px; top:{TOP}px; width:{WIDTH}px; height:{HEIGHT}px;"></div>
             <!-- END border -->
             <div id="british_army"></div>
+            <div id="token_black" class="token"></div>
+            <div id="token_gray" class="token"></div>
+            <div id="token_red" class="token"></div>
+            <div id="token_blue" class="token"></div>
+            <div id="token_tan" class="token"></div>
         </div>
 
     </div>
 
+    <div id="player_hand_wrapper" class="player_hand whiteblock">
+        <div class="side_title_wrapper">
+            <div id="player_hand" class="side_title color_{PLAYER_COLOR}">MY HAND</div>
+        </div>
+        <div id="title_sep_{PLAYER_COLOR}"></div>
+    </div>
+
     <div id="player_area_wrapper">
- 
+         <!-- BEGIN player -->
+         <div id="player_area" class="player_area whiteblock">
+             <!-- <h3> {PLAYER_NAME} </h3> -->
+            <div class="side_title_wrapper">
+                <div id="player_area_{PLAYER_COLOR}" class="side_title color_{PLAYER_COLOR}">{PLAYER_NAME}</div>
+            </div>
+            <div id="title_sep_{PLAYER_COLOR}"></div>
+            <!-- <div id="player_adventurer_{PLAYER_ID}" class="player_adventurer"></div> -->
+            <!-- <div id="player_card_area_{PLAYER_ID}" class="player_card_area"></div> -->
+            <!-- <div id="player_figure_area_{PLAYER_ID}" class="player_figure_area"></div> -->
+        </div>
+        <!-- END player -->    
     </div>
 
 </div>

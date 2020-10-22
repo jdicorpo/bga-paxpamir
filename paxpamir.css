@@ -83,6 +83,10 @@
     display: inline-block;
 }
 
+.market_wrapper {
+    display: inline-block;
+}
+
 .market {
     position: relative;
 }
@@ -95,6 +99,22 @@
     /* background-color: palevioletred; */
     /* opacity: 0.5; */
     position: relative;
+}
+
+#deck {
+    background-image: url('img/cards.jpg');
+    background-position: -1611px -2259px;
+    left: 1258px;
+    top: 77px;
+}
+
+#discard {
+    border-radius: 15px;
+    border-style: dashed;
+    border-width: 2px;
+    top: 261px;
+    left: 1258px;
+    top: 343px;
 }
 
 #board {
@@ -111,42 +131,25 @@
 }
 
 .region {
-    background-color: palevioletred;
+    /* background-color: palevioletred; */
     opacity: 0.5;
     position: absolute;
 }
 
 .border {
-    background-color: paleturquoise;
+    /* background-color: paleturquoise; */
     opacity: 0.5;
     position: absolute;
 }
 
 .card {
 	border-radius: 10px;
-    box-shadow: 1px 1px 1px 0px #222;
+    /* box-shadow: 1px 1px 1px 0px #222; */
     border-color: white;
     border-width: thin;
     border-style: solid;
 	/* z-index: 20; */
 	width: 179px;
-	/* height: 177.75px; */
-	height: 251px;
-    background-clip: content-box;
-    position: absolute;
-    display: inline-block;
-    /* background-image: url('img/cards.jpg'); */
-}
-
-.stockitem {
-	border-radius: 10px;
-    box-shadow: 1px 1px 1px 0px #222;
-    border-color: white;
-    border-width: thin;
-    border-style: solid;
-	/* z-index: 20; */
-	width: 179px;
-	/* height: 177.75px; */
 	height: 251px;
     background-clip: content-box;
     position: absolute;
@@ -157,7 +160,7 @@
 .market_card {
     position: absolute;
     /* background-image: url('img/cards.jpg'); */
-}
+} */
 
 #british_army {
     position: absolute;
@@ -169,6 +172,114 @@
     z-index: 5;
 }
 
+.token {
+    position: absolute;
+    background-image: url('img/tokens.png');
+    width: 50px;
+    height: 50px;
+    z-index: 5;
+}
+
+#token_red { 
+    background-position:-150px 0;
+    top: 130px;
+    left: 180px;
+}
+#token_black { 
+    background-position:-0px 0;
+    top: 200px;
+    left: 200px;
+}
+#token_gray { 
+    background-position:-100px 0;
+    top: 130px;
+    left: 220px;
+}
+#token_blue { 
+    background-position:-50px 0;
+    top: 170px;
+    left: 220px;
+}
+#token_tan { 
+    background-position:-200px 0;
+    top: 170px;
+    left: 180px;
+}
+
+
+
+.side_title_wrapper {
+    height: 248px;
+    width: 25px;
+    position: absolute;
+    /* top: 5px; */
+    overflow-wrap: break-word;
+    display: inline-block;
+    /* background-color: rgb(0,136,143); */
+    background-color: rgb(223,223,223,0.5);
+    padding: 5px;
+	border-radius: 10px;
+}
+
+.player_hand {
+    /* display: inline-block; */
+    display: block;
+	position: relative;
+    /* vertical-align: top; */
+    /* width: 100%; */
+    margin-left: 10px;
+    /* width: 95%; */
+    min-height: 251px;
+    /* padding: 5px 0px 0px 10px; */
+}
+
+.player_area {
+    /* display: inline-block; */
+    display: block;
+	position: relative;
+    /* vertical-align: top; */
+    /* width: 100%; */
+    margin-left: 10px;
+    /* width: 95%; */
+    min-height: 251px;
+    /* padding: 5px 0px 0px 10px; */
+}
+
+.side_title {
+    /* color: white; */
+    display: inline-block;
+    font-weight: 900;
+    font-size: 20px;
+    /* text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px gray, 0 0 30px grey, 0 0 40px grey, 0 0 55px black, 0 0 75px black; */
+    text-transform: uppercase;
+    /* transform: rotate(90deg) tr÷anslateY(-1.5em); */
+    transform: rotate(90deg);
+    /* transform-origin: top left; */
+    transform-origin: bottom left;
+    /* overflow-wrap: break-word; */
+    overflow-wrap: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.side_title_wrapper + div {
+	margin-left: 20px;
+}
+
+.possibleCard {
+    cursor: pointer;
+    box-shadow: 0px 0px 4px 4px orangered !important;
+    /* box-shadow: 0px 0px 4px 4px yellow !important; */
+}
+
+.possibleCard:hover {
+	box-shadow: 0px 0px 4px 4px blue !important;
+}
+
+.selected {
+	cursor: pointer;
+	box-shadow: 0px 0px 4px 4px blue !important;
+}
 
 
 
