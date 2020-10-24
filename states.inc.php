@@ -85,10 +85,21 @@ $machinestates = array(
     		"possibleactions" => array( "purchase", "play", "card_action", "pass" ),
     		"transitions" => array( 
                 "action" => STATE_PLAYER_ACTIONS, 
-                "pass" => STATE_NEXT_PLAYER 
+                "clean_up" => STATE_REFRESH_MARKET, 
             )
     ),
     
+    STATE_REFRESH_MARKET => array(
+        "name" => "refreshMarket",
+        "type" => "game",
+        "action" => "stRefreshMarket",
+        "updateGameProgression" => false,
+        "transitions" => array( 
+            "next_turn" => STATE_NEXT_PLAYER,
+            "clean_up" => STATE_REFRESH_MARKET,
+        )
+    ),
+
     STATE_NEXT_PLAYER => array(
         "name" => "nextPlayer",
         "type" => "game",

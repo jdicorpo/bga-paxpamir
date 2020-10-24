@@ -34,6 +34,8 @@ function (dojo, declare) {
             this.cardheight = 251;
               
             this.market = [];
+            this.player_hand = new ebg.stock();
+            this.court = [];
 
             this.clientStateArgs = {};
             this.handles = [];
@@ -65,8 +67,6 @@ function (dojo, declare) {
                 // TODO: Setting up players boards if needed
             }
             
-            // TODO: Set up your game interface here, according to "gamedatas"
-            
             for ( var row = 0; row <= 1; row++ ) {
                 this.market[row] = [];
                 for (var col = 0; col <= 5; col++) {
@@ -80,7 +80,39 @@ function (dojo, declare) {
                     for (var c in gamedatas.cards) {
                         this.market[row][col].addItemType(gamedatas.cards[c], 1, g_gamethemeurl + 'img/cards.jpg', gamedatas.cards[c].split('_')[1] -1);
                     }
-                    this.placeCard(this.market[row][col], gamedatas.market[row][col].key);
+                    if (gamedatas.market[row][col] !== null) {
+                        this.placeCard(this.market[row][col], gamedatas.market[row][col].key);
+                    }
+                }
+            }
+
+            this.player_hand.create( this, $('player_hand'), this.cardwidth, this.cardheight );
+            this.player_hand.image_items_per_row = 12;
+            this.player_hand.jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem card hand\" \
+                style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
+                background-image:url('${image}');\"></div>";
+            
+            for (var c in gamedatas.cards) {
+                this.player_hand.addItemType( gamedatas.cards[c], 1, g_gamethemeurl + 'img/cards.jpg', gamedatas.cards[c].split('_')[1] -1 );
+            }
+
+            for (var c in gamedatas.hand) {
+                this.placeCard(this.player_hand, c );
+            }
+
+            for( var player_id in gamedatas.players ) {
+                var id = 'court_' + player_id;
+                this.court[player_id] = new ebg.stock();
+                this.court[player_id].create( this, $(id), this.cardwidth, this.cardheight);
+                this.court[player_id].image_items_per_row = 12;
+                this.court[player_id].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem card court\" \
+                    style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
+                    background-image:url('${image}');\"></div>";
+                for (var c in gamedatas.cards) {
+                    this.court[player_id].addItemType( gamedatas.cards[c], 1, g_gamethemeurl + 'img/cards.jpg', gamedatas.cards[c].split('_')[1] -1 );
+                }
+                for (var c in gamedatas.court[player_id]) {
+                    this.placeCard(this.court[player_id], c );
                 }
             }
  
@@ -187,6 +219,18 @@ function (dojo, declare) {
                         this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'blue' );
                         this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
                         break;
+
+                    case 'client_endTurn':
+                        this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'red' );
+                        this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'gray' );
+                        break;
+
+                    case 'client_selectPurchase':
+                    case 'client_selectPlay':
+                        this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
+                        break;
+                    default:
+                        break;
                 }
             }
         },        
@@ -214,15 +258,52 @@ function (dojo, declare) {
 
         },
 
+        moveCard : function(id, from_location, to_location) {
+            console.log( 'moveCard' );
+
+            if (from_location !== null) {
+                var from_div = from_location.getItemDivId(id);
+            } else {
+                from_div = null;
+            }
+            if (to_location !== null) {
+                to_location.addToStockWithId(id, id, from_div);
+            }
+            if (from_location !== null) {
+                from_location.removeFromStockById(id);
+            }
+
+            // if ('tooltip' in this.gamedatas.treasure_list[card.type]) {
+            //     var tooltip = _( this.gamedatas.treasure_list[card.type].tooltip );
+            //     this.addTooltip( this.player_card_area[target_player_id].getItemDivId(id), tooltip, '' );
+            // }
+
+        },
+
         updatePossibleCards: function() {
 
             this.clearLastAction();
 
-            dojo.query('.market_card').forEach(
-                function (node, index) {
-                    dojo.addClass(node, 'possibleCard');
-                    this.handles.push(dojo.connect(node,'onclick', this, 'onMarketCard'));
-                }, this);
+            switch (this.selectedAction) {
+                case 'purchase':
+                    dojo.query('.market_card').forEach(
+                        function (node, index) {
+                            dojo.addClass(node, 'possibleCard');
+                            this.handles.push(dojo.connect(node,'onclick', this, 'onCard'));
+                        }, this);
+                    break;
+                case 'play':
+                    dojo.query('.hand').forEach(
+                        function (node, index) {
+                            dojo.addClass(node, 'possibleCard');
+                            this.handles.push(dojo.connect(node,'onclick', this, 'onCard'));
+                        }, this);
+                    break;
+                case 'card_action':
+                    break;
+                default:
+                    break;
+            }
 
         },
 
@@ -268,10 +349,9 @@ function (dojo, declare) {
             if( this.isCurrentPlayerActive() )
             {       
                 console.log( 'onPurchase' );
+                this.selectedAction = 'purchase';
                 this.updatePossibleCards();
-                // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
-                    // lock: true,
-                // }, this, function( result ) {} );
+                this.setClientState("client_selectPurchase", { descriptionmyturn : _( "${you} must select a card to purchase") });
             }
         }, 
         
@@ -283,9 +363,9 @@ function (dojo, declare) {
             if( this.isCurrentPlayerActive() )
             {       
                 console.log( 'onPlay' );
-                // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
-                    // lock: true,
-                // }, this, function( result ) {} );
+                this.selectedAction = 'play';
+                this.updatePossibleCards();
+                this.setClientState("client_selectPlay", { descriptionmyturn : _( "${you} must select a card to play") });
             }
         }, 
 
@@ -297,6 +377,7 @@ function (dojo, declare) {
             if( this.isCurrentPlayerActive() )
             {       
                 console.log( 'onCardAction' );
+                this.selectedAction = 'card_action';
                 // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
                     // lock: true,
                 // }, this, function( result ) {} );
@@ -311,27 +392,50 @@ function (dojo, declare) {
             if( this.isCurrentPlayerActive() )
             {       
                 console.log( 'onPass' );
-                // this.ajaxcall( "/forbiddenisland/forbiddenisland/captureTreasure.html", {
-                    // lock: true,
-                // }, this, function( result ) {} );
+                this.selectedAction = 'pass';
+                if (this.remaining_actions == 0) {
+                    this.ajaxcall( "/paxpamir/paxpamir/passAction.html", {
+                        lock: true
+                    }, this, function( result ) {} );
+                } else {
+                    this.setClientState("client_endTurn", { descriptionmyturn : _( "Confirm to your end turn ") });
+                }
             }
         }, 
 
-        onMarketCard: function( evt )
+        onCard: function( evt )
         {
             var card_id = evt.currentTarget.id;
             dojo.stopEvent( evt );
-            console.log( 'onMarketCard ' + card_id );
+            console.log( 'onCard ' + card_id );
 
             this.selectedCard = card_id;
 
             if( this.isCurrentPlayerActive() )
-            {       
-                this.clearLastAction();
-                var node = $( card_id );
-                dojo.addClass(node, 'selected');
-                var cost = card_id.split('_')[2];
-                this.setClientState("client_confirmPurchase", { descriptionmyturn : "Purchase this card for "+cost+" rupees?"});
+            {   
+                switch (this.selectedAction) {
+                    case 'purchase':    
+                        this.clearLastAction();
+                        var node = $( card_id );
+                        dojo.addClass(node, 'selected');
+                        var cost = card_id.split('_')[2];
+                        this.setClientState("client_confirmPurchase", { descriptionmyturn : "Purchase this card for "+cost+" rupees?"});
+                        break;
+
+                    case 'play':    
+                        this.clearLastAction();
+                        var node = $( card_id );
+                        dojo.addClass(node, 'selected');
+                        var card_id = 'card_' + this.selectedCard.split('_')[4];
+                        this.ajaxcall( "/paxpamir/paxpamir/playCard.html", { 
+                            lock: true,
+                            card_id:card_id,
+                        }, this, function( result ) {} );  
+                        break;
+
+                    default:
+                        break;
+                }
             }
         }, 
 
@@ -339,14 +443,33 @@ function (dojo, declare) {
         {
             console.log( 'onCancel' );
             this.clearLastAction();
+            this.selectedAction = '';
             this.restoreServerGameState();
         }, 
 
         onConfirm: function()
         {
             console.log( 'onConfirm' );
-            this.clearLastAction();
-            this.restoreServerGameState();
+
+            switch (this.selectedAction) {
+                case 'purchase':
+                    var card_id = 'card_' + this.selectedCard.split('_')[5];
+                    this.ajaxcall( "/paxpamir/paxpamir/purchaseCard.html", { 
+                        lock: true,
+                        card_id:card_id,
+                    }, this, function( result ) {} );  
+                    break;
+                    
+                case 'pass':
+                    this.ajaxcall( "/paxpamir/paxpamir/passAction.html", { 
+                        lock: true,
+                    }, this, function( result ) {} ); 
+                    break;
+
+                default:
+                    break;
+            }
+
         }, 
         
         
@@ -365,35 +488,73 @@ function (dojo, declare) {
         setupNotifications: function()
         {
             console.log( 'notifications subscriptions setup' );
+
+            dojo.subscribe( 'purchaseCard', this, "notif_purchaseCard" );
+            this.notifqueue.setSynchronous( 'purchaseCard', 2000 );
+
+            dojo.subscribe( 'playCard', this, "notif_playCard" );
+            this.notifqueue.setSynchronous( 'playCard', 2000 );
+
+            dojo.subscribe( 'refreshMarket', this, "notif_refreshMarket" );
+            this.notifqueue.setSynchronous( 'refreshMarket', 500 );
             
-            // TODO: here, associate your game notifications with local methods
-            
-            // Example 1: standard notification handling
-            // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
-            
-            // Example 2: standard notification handling + tell the user interface to wait
-            //            during 3 seconds after calling the method in order to let the players
-            //            see what is happening in the game.
-            // dojo.subscribe( 'cardPlayed', this, "notif_cardPlayed" );
-            // this.notifqueue.setSynchronous( 'cardPlayed', 3000 );
-            // 
         },  
-        
-        // TODO: from this point and below, you can write your game notifications handling methods
-        
-        /*
-        Example:
-        
-        notif_cardPlayed: function( notif )
+
+        notif_purchaseCard: function( notif )
         {
-            console.log( 'notif_cardPlayed' );
+            console.log( 'notif_purchaseCard' );
             console.log( notif );
-            
-            // Note: notif.args contains the arguments specified during you "notifyAllPlayers" / "notifyPlayer" PHP call
-            
-            // TODO: play the card in the user interface.
-        },    
+
+            this.clearLastAction();
+            var row = notif.args.market_location.split('_')[1];
+            var col = notif.args.market_location.split('_')[2];
+
+            if (notif.args.player_id == this.player_id) {
+                this.moveCard(notif.args.card.key, this.market[row][col], this.player_hand);
+            } else {
+                this.moveCard(notif.args.card.key, this.market[row][col], null);
+            }
+        },
+
+        notif_playCard: function( notif )
+        {
+            console.log( 'notif_playCard' );
+            console.log( notif );
+
+            this.clearLastAction();
+            var player_id = notif.args.player_id;
+
+            if (player_id == this.player_id) {
+                this.moveCard(notif.args.card.key, this.player_hand, this.court[player_id]);
+            } else {
+                this.moveCard(notif.args.card.key, null, this.court[player_id]);
+            }
+        },
+
+        notif_refreshMarket: function( notif )
+        {
+            console.log( 'notif_refreshMarket' );
+            console.log( notif );
+
+            this.clearLastAction();
+
+            notif.args.card_moves.forEach (
+                function (move, index) {
+                    this.moveCard( 
+                        move.card_id, 
+                        this.market[move.from.split('_')[1]][move.from.split('_')[2]], 
+                        this.market[move.to.split('_')[1]][move.to.split('_')[2]]
+                    );
+                }, this);
+
+            notif.args.new_cards.forEach (
+                function (move, index) {
+                    this.placeCard(
+                        this.market[move.to.split('_')[1]][move.to.split('_')[2]], 
+                        move.card_id );
+                }, this);
+
+        },
         
-        */
    });             
 });

@@ -57,11 +57,12 @@
 
     </div>
 
-    <div id="player_hand_wrapper" class="player_hand whiteblock">
+    <div id="player_hand_area" class="player_area whiteblock">
         <div class="side_title_wrapper">
-            <div id="player_hand" class="side_title color_{PLAYER_COLOR}">MY HAND</div>
+            <div class="side_title color_{PLAYER_COLOR}">MY HAND</div>
         </div>
         <div id="title_sep_{PLAYER_COLOR}"></div>
+        <div id="player_hand" class="player_card_area"></div>
     </div>
 
     <div id="player_area_wrapper">
@@ -73,7 +74,7 @@
             </div>
             <div id="title_sep_{PLAYER_COLOR}"></div>
             <!-- <div id="player_adventurer_{PLAYER_ID}" class="player_adventurer"></div> -->
-            <!-- <div id="player_card_area_{PLAYER_ID}" class="player_card_area"></div> -->
+            <div id="court_{PLAYER_ID}" class="player_card_area"></div>
             <!-- <div id="player_figure_area_{PLAYER_ID}" class="player_figure_area"></div> -->
         </div>
         <!-- END player -->    

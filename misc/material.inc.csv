@@ -125,10 +125,10 @@ border_transcaspia_herat|Transcaspia-Kabul Border|border {'left' => 860, 'top' =
 |European Cannons|card court_card|transcaspia|military|3|||||||
 |Cossacks|card court_card|transcaspia|military|1|||||||
 |Count Perovsky|card court_card|transcaspia|military|2|||||||
-|Dominance Check|card event_card||||||||||
-|Dominance Check|card event_card||||||||||
-|Dominance Check|card event_card||||||||||
-|Dominance Check|card event_card||||||||||
+|Dominance Check|card event_card dom_check||||||||||
+|Dominance Check|card event_card dom_check||||||||||
+|Dominance Check|card event_card dom_check||||||||||
+|Dominance Check|card event_card dom_check||||||||||
 |Event Card|card event_card {'discarded' => 'Favor Military', 'purchased' => 'New Tactics'}||||||||||
 |Event Card|card event_card {'discarded' => 'Embarrassment of Riches', 'purchased' => 'Koh-i-noor Recovered'}||||||||||
 |Event Card|card event_card {'discarded' => 'Disregard for Customs', 'purchased' => 'Courtly Manners'}||||||||||

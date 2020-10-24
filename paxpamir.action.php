@@ -37,31 +37,30 @@
             $this->view = "paxpamir_paxpamir";
             self::trace( "Complete reinitialization of board game" );
       }
-  	} 
-  	
-  	// TODO: defines your action entry points there
-
-
-    /*
+    } 
     
-    Example:
-  	
-    public function myAction()
+    public function purchaseCard()
     {
         self::setAjaxMode();     
-
-        // Retrieve arguments
-        // Note: these arguments correspond to what has been sent through the javascript "ajaxcall" method
-        $arg1 = self::getArg( "myArgument1", AT_posint, true );
-        $arg2 = self::getArg( "myArgument2", AT_posint, true );
-
-        // Then, call the appropriate method in your game logic, like "playCard" or "myAction"
-        $this->game->myAction( $arg1, $arg2 );
-
+        $card_id = self::getArg( "card_id", AT_alphanum, true );
+        $result = $this->game->purchaseCard($card_id);
         self::ajaxResponse( );
     }
-    
-    */
+
+    public function playCard()
+    {
+        self::setAjaxMode();     
+        $card_id = self::getArg( "card_id", AT_alphanum, true );
+        $result = $this->game->playCard($card_id);
+        self::ajaxResponse( );
+    }
+
+    public function passAction()
+    {
+        self::setAjaxMode();
+        $result = $this->game->passAction();
+        self::ajaxResponse( );
+    }
 
   }
   
