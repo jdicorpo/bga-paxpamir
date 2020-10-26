@@ -100,6 +100,8 @@ function (dojo, declare) {
             this.setupNotifications();
 
             console.log( "Ending game setup" );
+
+            debugger;
         },
 
         setup_cards: function( stock, node, class_name ) {

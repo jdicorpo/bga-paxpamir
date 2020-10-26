@@ -33,6 +33,9 @@
 -- Example 2: add a custom field to the standard "player" table
 -- ALTER TABLE `player` ADD `player_my_custom_field` INT UNSIGNED NOT NULL DEFAULT '0';
 
+ALTER TABLE `player` ADD `coins` int(10) unsigned NOT NULL DEFAULT '0';
+ALTER TABLE `player` ADD `loyalty` varchar(32) NOT NULL;
+
 CREATE TABLE IF NOT EXISTS `token` (
   `token_key` varchar(32) NOT NULL,
   `token_location` varchar(32) NOT NULL,

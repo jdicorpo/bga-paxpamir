@@ -255,6 +255,16 @@
     min-height: 251px;
 }
 
+.player_token_area {
+    /* margin-left: 50px; */
+    display: inline-block;
+    vertical-align: top;
+    width: 70%;
+    margin-left: 197px;
+    min-height: 251px;
+    background-color: palevioletred;
+}
+
 .side_title {
     /* color: white; */
     display: inline-block;

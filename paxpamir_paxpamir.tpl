@@ -75,6 +75,7 @@
             <div id="title_sep_{PLAYER_COLOR}"></div>
             <!-- <div id="player_adventurer_{PLAYER_ID}" class="player_adventurer"></div> -->
             <div id="court_{PLAYER_ID}" class="player_card_area"></div>
+            <div id="tokens_{PLAYER_ID}" class="player_token_area"></div>
             <!-- <div id="player_figure_area_{PLAYER_ID}" class="player_figure_area"></div> -->
         </div>
         <!-- END player -->    

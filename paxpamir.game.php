@@ -72,15 +72,19 @@ class paxpamir extends Table
         // The number of colors defined here must correspond to the maximum number of players allowed for the gams
         $gameinfos = self::getGameinfos();
         $default_colors = $gameinfos['player_colors'];
+        $num = count($players);
  
         // Create players
         // Note: if you added some extra field on "player" table in the database (dbmodel.sql), you can initialize it there.
-        $sql = "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar) VALUES ";
+        $sql = "INSERT INTO player (player_id, player_color, player_canal, player_name, player_avatar, loyalty, coins) VALUES ";
         $values = array();
         foreach( $players as $player_id => $player )
         {
             $color = array_shift( $default_colors );
-            $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."')";
+            $loyalty = "null";
+            $coins = 4;
+            $values[] = "('".$player_id."','$color','".$player['player_canal']."','".addslashes( $player['player_name'] )."','".addslashes( $player['player_avatar'] )."','$loyalty','$coins')";
+            $this->tokens->createTokensPack("token_".$player_id."_{INDEX}", "tokens_".$player_id, 10);
         }
         $sql .= implode( $values, ',' );
         self::DbQuery( $sql );
@@ -89,8 +93,32 @@ class paxpamir extends Table
         
         /************ Start the game initialization *****/
 
-        $this->tokens->createTokensPack("card_{INDEX}", "deck", 116);
-        $this->tokens->shuffle("deck");
+        // $this->tokens->createTokensPack("card_{INDEX}", "deck", 116);
+        $this->tokens->createTokensPack("card_{INDEX}", "court_cards", 100);
+        $this->tokens->createTokensPack("card_{INDEX}", "dom_cards", 4, 101);
+        $this->tokens->createTokensPack("card_{INDEX}", "event_cards", 12, 105);
+        $this->tokens->shuffle("court_cards");
+        $this->tokens->shuffle("event_cards");
+
+        // build deck based on number of players
+        for ($i = 6; $i >=1; $i--) {
+            $this->tokens->pickTokensForLocation($num+5, 'court_cards', 'pile');
+            if ($i == 2) {
+                $this->tokens->pickTokensForLocation(2, 'event_cards', 'pile');
+            } elseif ($i > 2) {
+                $this->tokens->pickTokensForLocation(1, 'event_cards', 'pile');
+                $this->tokens->pickTokensForLocation(1, 'dom_cards', 'pile');
+            }
+            $this->tokens->shuffle('pile');
+            $pile = $this->tokens->getTokensInLocation('pile');
+            $n_cards = $this->tokens->countTokensInLocation('deck');
+            foreach ( $pile as $id => $info) {
+                // $this->tokens->insertTokenOnExtremePosition($id, 'deck', true);
+                $this->tokens->moveToken($id, 'deck', $info['state'] + $n_cards);
+            }
+        }
+
+        $this->tokens->createTokensPack("coin_{INDEX}", "pool", 20);
 
         // Init global values with their initial values
         self::setGameStateInitialValue( 'remaining_actions', 2 );
@@ -129,7 +157,7 @@ class paxpamir extends Table
     
         // Get information about players
         // Note: you can retrieve some extra field you added for "player" table in "dbmodel.sql" if you need it.
-        $sql = "SELECT player_id id, player_score score FROM player ";
+        $sql = "SELECT player_id id, player_score score, loyalty, coins FROM player ";
         $result['players'] = self::getCollectionFromDb( $sql );
 
         // TODO: Gather all information about current game situation (visible by player $current_player_id).
@@ -137,7 +165,10 @@ class paxpamir extends Table
         $players = $this->loadPlayersBasicInfos();
         foreach ( $players as $player_id => $player_info ) {
             $result['court'][$player_id] = $this->tokens->getTokensInLocation('court_'.$player_id);
+            $result['tokens'][$player_id] = $this->tokens->getTokensInLocation('tokens_'.$player_id);
         }
+
+        $result['hand'] = $this->tokens->getTokensInLocation('hand_'.$current_player_id);
 
         $result['token_types'] = $this->token_types;
         $result['cards'] = array();
@@ -147,14 +178,17 @@ class paxpamir extends Table
                 $result['cards'][] = $key;
             }
         }
-        $result['deck'] = $this->tokens->getTokensOfTypeInLocation(null, 'deck');
+
+        $result['deck'] = $this->tokens->getTokensOfTypeInLocation(null, 'deck', null, 'state');
+
         for ($i = 0; $i < 6; $i++) {
             // $result['market'][0][$i] = $this->tokens->getTokenOnTop('market_0_'.$i);
             $result['market'][0][$i] = $this->tokens->getTokenOnLocation('market_0_'.$i);
             $result['market'][1][$i] = $this->tokens->getTokenOnLocation('market_1_'.$i);
         }
 
-        $result['hand'] = $this->tokens->getTokensInLocation('hand_'.$current_player_id);
+        $result['coins'] = $this->tokens->getTokensOfTypeInLocation('coin', null);
+        $result['tokens'] = $this->tokens->getTokensOfTypeInLocation('token', null);
 
         return $result;
     }
