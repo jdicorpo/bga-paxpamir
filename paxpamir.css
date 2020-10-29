@@ -251,7 +251,7 @@
     display: inline-block;
     vertical-align: top;
     width: 70%;
-    margin-left: 197px;
+    margin-left: 50px;
     min-height: 251px;
 }
 
@@ -260,8 +260,8 @@
     display: inline-block;
     vertical-align: top;
     width: 70%;
-    margin-left: 197px;
-    min-height: 251px;
+    margin-left: 50px;
+    min-height: 50px;
     background-color: palevioletred;
 }
 

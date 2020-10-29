@@ -70,7 +70,7 @@
          <div id="player_area" class="player_area whiteblock">
              <!-- <h3> {PLAYER_NAME} </h3> -->
             <div class="side_title_wrapper">
-                <div id="player_area_{PLAYER_COLOR}" class="side_title color_{PLAYER_COLOR}">{PLAYER_NAME}</div>
+                <div id="player_area_{PLAYER_COLOR}" class="side_title color_{PLAYER_COLOR}">{PLAYER_NAME}'s Court</div>
             </div>
             <div id="title_sep_{PLAYER_COLOR}"></div>
             <!-- <div id="player_adventurer_{PLAYER_ID}" class="player_adventurer"></div> -->

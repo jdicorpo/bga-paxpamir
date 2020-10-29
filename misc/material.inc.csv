@@ -2,6 +2,12 @@ element_id|element_name|element_type|region|suit|rank|impact|actions|special|pri
 deck|Deck|deck {'loc'=>2,'content'=>0,'counter'=>1 }|||||||||Player's Card Deck|
 discard|Discard|discard {'loc'=>2,'content'=>1,'counter'=>1 }|||||||||Player's Discard Pile|Click to inspect
 hand||hand {'loc'=>2,'content'=>2,'counter'=>1 }||||||||||
+|red|player {'color' => 'd30505', 'idx' => 0}||||||||||
+|blue|player {'color' => '305a72', 'idx' => 0}||||||||||
+|tan|player {'color' => 'd30505', 'idx' => 0}||||||||||
+|gray|player {'color' => 'd30505', 'idx' => 0}||||||||||
+|black|player {'color' => 'd30505', 'idx' => 0}||||||||||
+token_colors|token_colors|token_colors { 'd30505' => 3, '305a72' => 1, 'cfa580' => 4, '6b6663' => 2, '292623' => 0 }||||||||||
 transcaspia|Transcaspia|region {'left' => 100, 'top' => 100, 'width' => 270, 'height' => 220, 'borders' => 'persia, herat, kabul'}||||||||||
 kabul|Kabul|region {'left' => 500, 'top' => 100, 'width' => 300, 'height' => 200, 'borders' => 'transcaspia, herat, kandahar, punjab'}||||||||||
 persia|Persia|region {'left' => 100, 'top' => 400, 'width' => 180, 'height' => 200, 'borders' => 'transcaspia, herat'}||||||||||

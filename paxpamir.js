@@ -36,6 +36,7 @@ function (dojo, declare) {
             this.market = [];
             this.player_hand = new ebg.stock();
             this.court = [];
+            this.player_token_area = [];
 
             this.clientStateArgs = {};
             this.handles = [];
@@ -94,6 +95,23 @@ function (dojo, declare) {
                 for (var c in gamedatas.court[player_id]) {
                     this.placeCard(this.court[player_id], c );
                 }
+                this.player_token_area[player_id] = new ebg.stock();
+                this.player_token_area[player_id].create( this, $( 'tokens_' + player_id ), 50, 50 );
+                for ( var i = 1; i <= 10; i++ ) {
+                    var player_color = gamedatas.players[player_id].color;
+                    this.player_token_area[player_id].addItemType( 
+                        'token_' + player_id + '_' + i, 
+                        1, g_gamethemeurl + 'img/tokens.png', 
+                        gamedatas.token_types.token_colors[player_color] 
+                    );
+                }
+                this.player_token_area[player_id].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem card token\" \
+                style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
+                background-image:url('${image}');\"></div>";
+
+                for (var t in gamedatas.tokens[player_id]) {
+                    this.placeToken(this.player_token_area[player_id], t );
+                }
             }
  
             // Setup game notifications to handle (see "setupNotifications" method below)
@@ -101,7 +119,6 @@ function (dojo, declare) {
 
             console.log( "Ending game setup" );
 
-            debugger;
         },
 
         setup_cards: function( stock, node, class_name ) {
@@ -298,6 +315,19 @@ function (dojo, declare) {
                 default:
                     break;
             }
+
+        },
+
+        placeToken : function(location, id) {
+            console.log( 'placeToken' );
+
+            // var idx = this.gamedatas.flood_list[id].img_id
+            // var tooltip = this.gamedatas.flood_list[id].name;
+
+            location.addToStockWithId(id, id, 'deck');
+            // location.addToStockWithId(id, id, this.flood_deck);
+
+            // this.addTooltip( this.flood_card_area.getItemDivId(id), tooltip, '' );
 
         },
 

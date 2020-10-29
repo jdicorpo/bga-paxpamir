@@ -188,7 +188,7 @@ class paxpamir extends Table
         }
 
         $result['coins'] = $this->tokens->getTokensOfTypeInLocation('coin', null);
-        $result['tokens'] = $this->tokens->getTokensOfTypeInLocation('token', null);
+        // $result['tokens'] = $this->tokens->getTokensOfTypeInLocation('token', null);
 
         return $result;
     }

@@ -51,6 +51,36 @@ $this->token_types = array(
   'name' => '',
   'loc'=>2,'content'=>2,'counter'=>1 ,
 ),
+'player_1' => array(
+  'type' => 'player',
+  'name' => clienttranslate("red"),
+  'color' => 'd30505', 'idx' => 0,
+),
+'player_2' => array(
+  'type' => 'player',
+  'name' => clienttranslate("blue"),
+  'color' => '305a72', 'idx' => 0,
+),
+'player_3' => array(
+  'type' => 'player',
+  'name' => clienttranslate("tan"),
+  'color' => 'd30505', 'idx' => 0,
+),
+'player_4' => array(
+  'type' => 'player',
+  'name' => clienttranslate("gray"),
+  'color' => 'd30505', 'idx' => 0,
+),
+'player_5' => array(
+  'type' => 'player',
+  'name' => clienttranslate("black"),
+  'color' => 'd30505', 'idx' => 0,
+),
+'token_colors' => array(
+  'type' => 'token_colors',
+  'name' => clienttranslate("token_colors"),
+   'd30505' => 3, '305a72' => 1, 'cfa580' => 4, '6b6663' => 2, '292623' => 0 ,
+),
 'transcaspia' => array(
   'type' => 'region',
   'name' => clienttranslate("Transcaspia"),
@@ -84,7 +114,7 @@ $this->token_types = array(
 'border_transcaspia_kabul' => array(
   'type' => 'border',
   'name' => clienttranslate("Transcaspia-Kabul Border"),
-  'left' => 860, 'top' => 280, 'width' => 100, 'height' => 320, 'regions' => 'transcaspia, kabul',
+  'left' => 410, 'top' => 100, 'width' => 75, 'height' => 200, 'regions' => 'transcaspia, kabul',
 ),
 'border_transcaspia_herat' => array(
   'type' => 'border',
@@ -963,19 +993,19 @@ $this->token_types = array(
   'tooltip_action' => clienttranslate("military"),
 ),
 'card_101' => array(
-  'type' => 'card event_card',
+  'type' => 'card event_card dom_check',
   'name' => clienttranslate("Dominance Check"),
 ),
 'card_102' => array(
-  'type' => 'card event_card',
+  'type' => 'card event_card dom_check',
   'name' => clienttranslate("Dominance Check"),
 ),
 'card_103' => array(
-  'type' => 'card event_card',
+  'type' => 'card event_card dom_check',
   'name' => clienttranslate("Dominance Check"),
 ),
 'card_104' => array(
-  'type' => 'card event_card',
+  'type' => 'card event_card dom_check',
   'name' => clienttranslate("Dominance Check"),
 ),
 'card_105' => array(
