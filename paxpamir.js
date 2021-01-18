@@ -32,10 +32,18 @@ function (dojo, declare) {
 
             this.cardwidth = 179;
             this.cardheight = 251;
+
+            this.tokenwidth = 50;
+            this.tokenheight = 50;
               
             this.market = [];
+
+            this.card_tokens = [];
+
             this.player_hand = new ebg.stock();
+
             this.court = [];
+
             this.player_token_area = [];
 
             this.clientStateArgs = {};
@@ -73,7 +81,7 @@ function (dojo, declare) {
                 for (var col = 0; col <= 5; col++) {
                     var id = 'market_'+row+'_'+col;
                     this.market[row][col] = new ebg.stock();
-                    this.setup_cards(this.market[row][col], $(id), 'market_card');
+                    this.setup_cards(this.market[row][col], id, 'market_card');
 
                     if (gamedatas.market[row][col] !== null) {
                         this.placeCard(this.market[row][col], gamedatas.market[row][col].key);
@@ -81,7 +89,7 @@ function (dojo, declare) {
                 }
             }
 
-            this.setup_cards(this.player_hand, $('player_hand'), 'hand');
+            this.setup_cards(this.player_hand, 'player_hand', 'hand');
 
             for (var c in gamedatas.hand) {
                 this.placeCard(this.player_hand, c );
@@ -90,13 +98,13 @@ function (dojo, declare) {
             for( var player_id in gamedatas.players ) {
                 var id = 'court_' + player_id;
                 this.court[player_id] = new ebg.stock();
-                this.setup_cards(this.court[player_id], $(id), 'court');
+                this.setup_cards(this.court[player_id], id, 'court');
 
                 for (var c in gamedatas.court[player_id]) {
                     this.placeCard(this.court[player_id], c );
                 }
                 this.player_token_area[player_id] = new ebg.stock();
-                this.player_token_area[player_id].create( this, $( 'tokens_' + player_id ), 50, 50 );
+                this.player_token_area[player_id].create( this, $( 'tokens_' + player_id ), this.tokenwidth, this.tokenheight );
                 for ( var i = 1; i <= 10; i++ ) {
                     var player_color = gamedatas.players[player_id].color;
                     this.player_token_area[player_id].addItemType( 
@@ -121,16 +129,33 @@ function (dojo, declare) {
 
         },
 
-        setup_cards: function( stock, node, class_name ) {
-            stock.create( this, node, this.cardwidth, this.cardheight );
+        setup_cards: function( stock, node_id, class_name ) {
+            stock.create( this, $(node_id), this.cardwidth, this.cardheight );
             stock.image_items_per_row = 12;
             stock.jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem card " + class_name + "\" \
                 style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
-                background-image:url('${image}');\"></div>";
+                background-image:url('${image}');\"><div id=\"${id}_tokens\" class=\"card_token_area\"></div></div>";
             
             for (var c in this.gamedatas.cards) {
                 stock.addItemType( this.gamedatas.cards[c], 1, g_gamethemeurl + 'img/cards.jpg', this.gamedatas.cards[c].split('_')[1] -1 );
             }
+        },
+
+        setup_tokens: function( stock, node_id, class_name ) {
+            stock.create( this, $(node_id), this.tokenwidth, this.tokenheight );
+            stock.image_items_per_row = 6;
+            // stock.centerItems = true;
+            // stock.jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem token " + class_name + "\" \
+            //     style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
+            //     background-image:url('${image}');\"></div>";
+            
+            for( var player_id in this.gamedatas.players ) {
+                var player_color = this.gamedatas.players[player_id].color;
+                // stock.addItemType( 'token_' + player_id + '_' + i, 1, g_gamethemeurl + 'img/tokens.png', this.gamedatas.token_types.token_colors[player_color] );
+                stock.addItemType( 'token_' + player_id, 1, g_gamethemeurl + 'img/tokens.png', this.gamedatas.token_types.token_colors[player_color] );
+            }
+
+            stock.addItemType( 'coin', 1, g_gamethemeurl + 'img/tokens.png', 5 );
         },
 
         adaptViewportSize : function() {
@@ -263,7 +288,25 @@ function (dojo, declare) {
             // var tooltip = this.gamedatas.flood_list[id].name;
 
             location.addToStockWithId(id, id, 'deck');
-            // location.addToStockWithId(id, id, this.flood_deck);
+
+            
+            if (!( id in this.card_tokens) ) {
+                // this.card_tokens[id] = new ebg.stock();
+                this.card_tokens[id] = new ebg.zone();
+                var node_id = location.control_name + '_item_'+ id + '_tokens';
+
+                // this.card_tokens[id].create( this, $(node_id), this.tokenwidth, this.tokenheight );
+                // this.card_tokens[id].image_items_per_row = 6;
+                // this.card_tokens[id].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem token card_token\" \
+                //     style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
+                //     background-image:url('${image}');\"></div>";    
+
+                this.setup_tokens(this.card_tokens[id], node_id, 'card_token');
+
+                this.card_tokens[id].addToStockWithId('coin', id);
+
+            }
+
 
             // this.addTooltip( this.flood_card_area.getItemDivId(id), tooltip, '' );
 

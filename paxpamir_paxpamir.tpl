@@ -33,7 +33,7 @@
             <div id="market" class="market">
                 <!-- BEGIN market_card -->
                 <div id="market_{ROW}_{COL}" class="card" style="left:{LEFT}px; top:{TOP}px;">
-                    <div id="market_rupees_{ROW}_{COL}" class="market_rupees"></div>
+                    <!-- <div id="market_rupees_{ROW}_{COL}" class="market_rupees"></div> -->
                 </div>
                 <!-- END market_card -->
                 <div id="deck" class="card"></div>

@@ -91,14 +91,18 @@
     position: relative;
 }
 
-.market_rupees {
+.card_token_area {
     width: 159px;
     height: 171px;
     left: 10px;
     top: 60px;
-    /* background-color: palevioletred; */
-    /* opacity: 0.5; */
+    background-color: palevioletred;
+    opacity: 0.5;
     position: relative;
+}
+
+.card_token {
+    opacity: 1;
 }
 
 #deck {
@@ -170,6 +174,14 @@
     height: 125px;
     top: 200px;
     left: 200px;
+    z-index: 5;
+}
+
+.coin {
+    position: absolute;
+    background-image: url('img/coin.png');
+    width: 300px;
+    height: 300px;
     z-index: 5;
 }
 
@@ -262,7 +274,7 @@
     width: 70%;
     margin-left: 50px;
     min-height: 50px;
-    background-color: palevioletred;
+    /* background-color: palevioletred; */
 }
 
 .side_title {
