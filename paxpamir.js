@@ -144,10 +144,10 @@ function (dojo, declare) {
         setup_tokens: function( stock, node_id, class_name ) {
             stock.create( this, $(node_id), this.tokenwidth, this.tokenheight );
             stock.image_items_per_row = 6;
-            // stock.centerItems = true;
-            // stock.jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem token " + class_name + "\" \
-            //     style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
-            //     background-image:url('${image}');\"></div>";
+            stock.centerItems = true;
+            stock.jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem token " + class_name + "\" \
+                style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
+                background-image:url('${image}');\"></div>";
             
             for( var player_id in this.gamedatas.players ) {
                 var player_color = this.gamedatas.players[player_id].color;
@@ -281,39 +281,66 @@ function (dojo, declare) {
         
         */
 
-        placeCard : function(location, id) {
-            console.log( 'placeCard' );
+       placeCardTokens : function(location, id) {
+            console.log( 'placeCardTokens' );
 
-            // var idx = this.gamedatas.flood_list[id].img_id
-            // var tooltip = this.gamedatas.flood_list[id].name;
-
-            location.addToStockWithId(id, id, 'deck');
-
-            
             if (!( id in this.card_tokens) ) {
-                // this.card_tokens[id] = new ebg.stock();
-                this.card_tokens[id] = new ebg.zone();
+
                 var node_id = location.control_name + '_item_'+ id + '_tokens';
 
-                // this.card_tokens[id].create( this, $(node_id), this.tokenwidth, this.tokenheight );
-                // this.card_tokens[id].image_items_per_row = 6;
-                // this.card_tokens[id].jstpl_stock_item= "<div id=\"${id}\" class=\"stockitem token card_token\" \
-                //     style=\"top:${top}px;left:${left}px;width:${width}px;height:${height}px;z-index:${position};\
-                //     background-image:url('${image}');\"></div>";    
+                // ** setup for zone
+                this.card_tokens[id] = new ebg.zone();
+                this.card_tokens[id].create( this, node_id, this.tokenwidth, this.tokenheight );
+                this.card_tokens[id].setPattern('ellipticalfit');
+                this.card_tokens[id].item_margin = 2;
 
-                this.setup_tokens(this.card_tokens[id], node_id, 'card_token');
+                for (c in this.gamedatas.coins) {
+                    if (this.gamedatas.coins[c].location == id) {
 
-                this.card_tokens[id].addToStockWithId('coin', id);
+                        var coin_id = this.gamedatas.coins[c].key;
+
+                        dojo.place(this.format_block('jstpl_coin', {
+                            id : coin_id,
+                        }), node_id);
+                        this.card_tokens[id].placeInZone(coin_id);
+                        this.addTooltip( coin_id, coin_id, '' );
+                    }
+                }
 
             }
 
+        },
 
-            // this.addTooltip( this.flood_card_area.getItemDivId(id), tooltip, '' );
+        addCardToken : function(location, card_id, token_id) {
+            console.log( 'addCardToken' );
+            var node_id = location.control_name + '_item_'+ card_id + '_tokens';
+
+            var card_tokens_list = this.card_tokens[card_id].getAllItems();
+
+            if (!card_tokens_list.includes(token_id)) {
+                dojo.place(this.format_block('jstpl_coin', {
+                    id : token_id,
+                }), node_id);
+                this.card_tokens[card_id].placeInZone(token_id);
+                this.addTooltip( token_id, token_id, '' );
+            }
+
+        },
+
+        placeCard : function(location, id) {
+            console.log( 'placeCard' );
+
+            location.addToStockWithId(id, id, 'deck');
+
+            this.placeCardTokens(location, id);
+                        
+            this.addTooltip( location.getItemDivId(id), id, '' );
 
         },
 
         moveCard : function(id, from_location, to_location) {
             console.log( 'moveCard' );
+            var card_tokens_list = this.card_tokens[id].getAllItems();
 
             if (from_location !== null) {
                 var from_div = from_location.getItemDivId(id);
@@ -321,16 +348,28 @@ function (dojo, declare) {
                 from_div = null;
             }
             if (to_location !== null) {
+                var node_id = to_location.control_name + '_item_'+ id + '_tokens';
                 to_location.addToStockWithId(id, id, from_div);
+
+                this.card_tokens[id] = new ebg.zone();
+                this.card_tokens[id].create( this, node_id, this.tokenwidth, this.tokenheight );
+                this.card_tokens[id].setPattern('ellipticalfit');
+                this.card_tokens[id].item_margin = 2;
+
+                card_tokens_list.forEach (
+                    function (token_id, index) { 
+                        dojo.place(this.format_block('jstpl_coin', {
+                            id : token_id,
+                        }), node_id);
+                        this.card_tokens[id].placeInZone(token_id);
+                        this.addTooltip( token_id, token_id, '' );
+                }, this);
+                this.addTooltip( to_location.getItemDivId(id), id, '' );
             }
+
             if (from_location !== null) {
                 from_location.removeFromStockById(id);
             }
-
-            // if ('tooltip' in this.gamedatas.treasure_list[card.type]) {
-            //     var tooltip = _( this.gamedatas.treasure_list[card.type].tooltip );
-            //     this.addTooltip( this.player_card_area[target_player_id].getItemDivId(id), tooltip, '' );
-            // }
 
         },
 
@@ -364,11 +403,7 @@ function (dojo, declare) {
         placeToken : function(location, id) {
             console.log( 'placeToken' );
 
-            // var idx = this.gamedatas.flood_list[id].img_id
-            // var tooltip = this.gamedatas.flood_list[id].name;
-
             location.addToStockWithId(id, id, 'deck');
-            // location.addToStockWithId(id, id, this.flood_deck);
 
             // this.addTooltip( this.flood_card_area.getItemDivId(id), tooltip, '' );
 
@@ -565,6 +600,8 @@ function (dojo, declare) {
             dojo.subscribe( 'refreshMarket', this, "notif_refreshMarket" );
             this.notifqueue.setSynchronous( 'refreshMarket', 500 );
             
+            dojo.subscribe('log', this, "notif_log");
+
         },  
 
         notif_purchaseCard: function( notif )
@@ -581,6 +618,14 @@ function (dojo, declare) {
             } else {
                 this.moveCard(notif.args.card.key, this.market[row][col], null);
             }
+
+            notif.args.updated_cards.forEach (
+                function (item, index) { this.addCardToken( 
+                    this.market[item.location.split('_')[1]][item.location.split('_')[2]],
+                    item.card_id, 
+                    item.coin_id 
+                ); 
+            }, this);
         },
 
         notif_playCard: function( notif )
@@ -621,6 +666,12 @@ function (dojo, declare) {
                         move.card_id );
                 }, this);
 
+        },
+
+        notif_log : function(notif) {
+            // this is for debugging php side
+            console.log(notif.log);
+            console.log(notif.args);
         },
         
    });             

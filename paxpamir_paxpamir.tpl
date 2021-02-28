@@ -93,6 +93,8 @@
 var jstpl_some_game_item='<div class="my_game_item" id="my_game_item_${MY_ITEM_ID}"></div>';
 
 */
+var jstpl_coin='<div id="${id}" class="token coin" style="background-position:-250px 0"></div>';
+var jstpl_token='<div id="${id}" class="token coin" style="background-position:-${x}px 0"></div>';
 
 </script>  
 

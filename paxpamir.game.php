@@ -118,7 +118,7 @@ class paxpamir extends Table
             }
         }
 
-        $this->tokens->createTokensPack("coin_{INDEX}", "pool", 20);
+        $this->tokens->createTokensPack("coin_{INDEX}", "pool", 36);
 
         // Init global values with their initial values
         self::setGameStateInitialValue( 'remaining_actions', 2 );
@@ -244,11 +244,42 @@ class paxpamir extends Table
         $card = $this->tokens->getTokenInfo($card_id);
         $card_name = $this->token_types[$card_id]['name'];
         $market_location = $card['location'];
+        $row = explode("_", $market_location)[1];
+        $col = explode("_", $market_location)[2];
 
         if ($this->getGameStateValue("remaining_actions") > 0) {
 
             $this->tokens->moveToken($card_id, 'hand_'.$player_id);
             $this->incGameStateValue("remaining_actions", -1);
+
+            $coins = $this->tokens->getTokensOfTypeInLocation('coin', $card_id);
+            // $this->tokens->moveTokens($coins, 'pool');
+            $this->tokens->moveAllTokensInLocation($card_id, 'pool');
+
+            self::notifyAllPlayers( "log", "purchaseCard", array(
+                'card' => $card,
+                'col' => $col,
+                'row' => $row,
+                'market_location' => $market_location,
+                'coins' => $coins
+            ) );
+
+            $updated_cards = array();
+
+            for ($i = $col-1; $i >= 0; $i--) {
+                $location = 'market_'.$row.'_'.$i;
+                $m_card = $this->tokens->getTokenOnLocation($location);
+                // echo "<pre>"; var_dump($m_card); echo "</pre>"; die('ok');
+                if ($m_card !== NULL) {
+                    $c = $this->tokens->getTokenOnTop('pool');
+                    $this->tokens->moveToken($c['key'], $m_card["key"]); 
+                    $updated_cards[] = array(
+                        'location' => $location,
+                        'card_id' => $m_card["key"],
+                        'coin_id' => $c['key']
+                    );
+                }
+            }
 
             self::notifyAllPlayers( "purchaseCard", clienttranslate( '${player_name} purchased ${card_name}' ), array(
                 'player_id' => $player_id,
@@ -256,6 +287,7 @@ class paxpamir extends Table
                 'card' => $card,
                 'card_name' => $card_name,
                 'market_location' => $market_location,
+                'updated_cards' => $updated_cards,
                 'i18n' => array( 'card_name' ),
             ) );
 
@@ -322,32 +354,6 @@ class paxpamir extends Table
         $this->gamestate->nextState( 'clean_up' );
         
     }
-
-    /*
-    
-    Example:
-
-    function playCard( $card_id )
-    {
-        // Check that this is the player's turn and that it is a "possible action" at this game state (see states.inc.php)
-        self::checkAction( 'playCard' ); 
-        
-        $player_id = self::getActivePlayerId();
-        
-        // Add your game logic to play a card there 
-        ...
-        
-        // Notify all players about the card played
-        self::notifyAllPlayers( "cardPlayed", clienttranslate( '${player_name} plays ${card_name}' ), array(
-            'player_id' => $player_id,
-            'player_name' => self::getActivePlayerName(),
-            'card_name' => $card_name,
-            'card_id' => $card_id
-        ) );
-          
-    }
-    
-    */
 
     
 //////////////////////////////////////////////////////////////////////////////
@@ -471,18 +477,6 @@ class paxpamir extends Table
 
     }
     
-    /*
-    
-    Example for game state "MyGameState":
-
-    function stMyGameState()
-    {
-        // Do some stuff ...
-        
-        // (very often) go to another gamestate
-        $this->gamestate->nextState( 'some_gamestate_transition' );
-    }    
-    */
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Zombie

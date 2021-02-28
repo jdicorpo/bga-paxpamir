@@ -92,12 +92,14 @@
 }
 
 .card_token_area {
-    width: 159px;
-    height: 171px;
-    left: 10px;
-    top: 60px;
-    background-color: palevioletred;
-    opacity: 0.5;
+    /* width: 159px; */
+    width: 139px;
+    /* height: 171px !important; */
+    height: 100px !important;
+    left: 20px;
+    top: 80px;
+    /* background-color: palevioletred; */
+    /* opacity: 0.5; */
     position: relative;
 }
 
@@ -177,13 +179,13 @@
     z-index: 5;
 }
 
-.coin {
+/* .coin {
     position: absolute;
     background-image: url('img/coin.png');
     width: 300px;
     height: 300px;
     z-index: 5;
-}
+} */
 
 .token {
     position: absolute;
