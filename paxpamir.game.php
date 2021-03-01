@@ -225,6 +225,35 @@ class paxpamir extends Table
         return (substr($string, 0, $len) === $startString); 
     } 
 
+    function getPlayerCoins($player_id) {
+        $sql = "SELECT coins FROM player WHERE  player_id='$player_id' ";
+        return $this->getUniqueValueFromDB($sql);
+    }
+
+    function incPlayerCoins($player_id, $value) {
+        $coins = $this->getPlayerCoins($player_id);
+        $coins += $value;
+        $sql = "UPDATE player SET coins='$coins' 
+                WHERE  player_id='$player_id' ";
+        self::DbQuery( $sql );
+    }
+
+    function updatePlayerCounts() {
+        $counts = array();
+        $players = $this->loadPlayersBasicInfos();
+        // $sql = "SELECT player_id id, player_score score, loyalty, coins FROM player ";
+        // $result['players'] = self::getCollectionFromDb( $sql );
+        foreach ( $players as $player_id => $player_info ) {
+            $counts[$player_id] = array();
+            $counts[$player_id]['coins'] = $this->getPlayerCoins($player_id );
+            $counts[$player_id]['tokens'] = count($this->tokens->getTokensOfTypeInLocation('token_'.$player_id, 'token_'.$player_id ));
+        }
+
+        self::notifyAllPlayers( "updatePlayerCounts", '', array(
+            'counts' => $counts
+        ) );
+    }
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
@@ -245,15 +274,22 @@ class paxpamir extends Table
         $card_name = $this->token_types[$card_id]['name'];
         $market_location = $card['location'];
         $row = explode("_", $market_location)[1];
-        $col = explode("_", $market_location)[2];
+        $col = $cost = explode("_", $market_location)[2];
 
         if ($this->getGameStateValue("remaining_actions") > 0) {
+
+            if ($cost > $this->getPlayerCoins($player_id)) {
+                throw new feException( "Not enough coins" );
+            } else {
+                $this->incPlayerCoins($player_id, -$cost);
+            };
 
             $this->tokens->moveToken($card_id, 'hand_'.$player_id);
             $this->incGameStateValue("remaining_actions", -1);
 
             $coins = $this->tokens->getTokensOfTypeInLocation('coin', $card_id);
             // $this->tokens->moveTokens($coins, 'pool');
+            $this->incPlayerCoins($player_id, count($coins));
             $this->tokens->moveAllTokensInLocation($card_id, 'pool');
 
             self::notifyAllPlayers( "log", "purchaseCard", array(
@@ -290,6 +326,8 @@ class paxpamir extends Table
                 'updated_cards' => $updated_cards,
                 'i18n' => array( 'card_name' ),
             ) );
+
+            $this->updatePlayerCounts();
 
         }
 

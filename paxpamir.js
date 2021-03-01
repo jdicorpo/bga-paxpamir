@@ -74,6 +74,15 @@ function (dojo, declare) {
                 var player = gamedatas.players[player_id];
                          
                 // TODO: Setting up players boards if needed
+                var playerBoardDiv = dojo.byId('player_board_' + player_id);
+                // var x = 50 * (gamedatas.player_list[player.adventurer].idx-1);
+                var x = 100;
+                dojo.place(this.format_block('jstpl_player_board', {
+                    id: player_id,
+                    x: x
+                }), playerBoardDiv);
+                $('coincount_' + player_id).innerHTML = gamedatas.players[player_id].coins;
+                $('tokencount_' + player_id).innerHTML = 0;
             }
             
             for ( var row = 0; row <= 1; row++ ) {
@@ -600,7 +609,8 @@ function (dojo, declare) {
             dojo.subscribe( 'refreshMarket', this, "notif_refreshMarket" );
             this.notifqueue.setSynchronous( 'refreshMarket', 500 );
             
-            dojo.subscribe('log', this, "notif_log");
+            dojo.subscribe( 'updatePlayerCounts', this, "notif_updatePlayerCounts");
+            dojo.subscribe( 'log', this, "notif_log");
 
         },  
 
@@ -626,6 +636,7 @@ function (dojo, declare) {
                     item.coin_id 
                 ); 
             }, this);
+
         },
 
         notif_playCard: function( notif )
@@ -666,6 +677,14 @@ function (dojo, declare) {
                         move.card_id );
                 }, this);
 
+        },
+
+        notif_updatePlayerCounts: function( notif )
+        {
+             for (var player_id in notif.args.counts) {
+                 $('coincount_' + player_id).innerHTML = notif.args.counts[player_id].coins;
+             };
+ 
         },
 
         notif_log : function(notif) {
