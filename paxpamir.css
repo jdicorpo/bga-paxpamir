@@ -121,7 +121,33 @@
     position: absolute;
     color: white;
     bottom: 16px;
-    left: 20px;
+    left: 16px;
+    text-align:center;
+}
+
+.card_icon {
+    background-image: url(img/card_icon.jpg);
+    /* background-size: 20%; */
+    /* border-radius: 3px; */
+	/* box-shadow: 1px 1px 1px 0px #222; */
+    display: inline-block;
+    width: 24px;
+    height: 34px;
+    background-clip: content-box;
+    margin: 5px;
+    /* margin-left: 5px; */
+    /* margin-top: 5px; */
+    position: relative;
+    transform: none;
+    top: 0px;
+    left: 0px;
+}
+
+.cardcount {
+    position: absolute;
+    color: white;
+    bottom: 7px;
+    left: 8px;
 }
 
 #market {

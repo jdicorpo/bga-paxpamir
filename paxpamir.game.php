@@ -166,6 +166,9 @@ class paxpamir extends Table
         foreach ( $players as $player_id => $player_info ) {
             $result['court'][$player_id] = $this->tokens->getTokensInLocation('court_'.$player_id);
             $result['tokens'][$player_id] = $this->tokens->getTokensInLocation('tokens_'.$player_id);
+            $result['counts'][$player_id]['coins'] = $this->getPlayerCoins($player_id );
+            $result['counts'][$player_id]['tokens'] = count($this->tokens->getTokensOfTypeInLocation('token', 'tokens_'.$player_id ));
+            $result['counts'][$player_id]['cards'] = count($this->tokens->getTokensOfTypeInLocation('card', 'hand_'.$player_id ));
         }
 
         $result['hand'] = $this->tokens->getTokensInLocation('hand_'.$current_player_id);
@@ -246,7 +249,8 @@ class paxpamir extends Table
         foreach ( $players as $player_id => $player_info ) {
             $counts[$player_id] = array();
             $counts[$player_id]['coins'] = $this->getPlayerCoins($player_id );
-            $counts[$player_id]['tokens'] = count($this->tokens->getTokensOfTypeInLocation('token_'.$player_id, 'token_'.$player_id ));
+            $counts[$player_id]['tokens'] = count($this->tokens->getTokensOfTypeInLocation('token', 'tokens_'.$player_id ));
+            $counts[$player_id]['cards'] = count($this->tokens->getTokensOfTypeInLocation('card', 'hand_'.$player_id ));
         }
 
         self::notifyAllPlayers( "updatePlayerCounts", '', array(

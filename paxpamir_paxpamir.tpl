@@ -99,6 +99,7 @@ var jstpl_player_board = '\<div id="p_board_${id}" class="p_board">\
     <div id="p_board_icon_${id}" class="p_board_icons">\
     <div id="coins_${id}" class="coin_icon"><span id="coincount_${id}"  class="coincount">0</span></div>\
     <div id="tokens_${id}" class="token_icon" style="background-position:-${x}px 0"><span id="tokencount_${id}"  class="tokencount">0</span></div>\
+    <div id="cards_${id}" class="card_icon"><span id="cardcount_${id}"  class="cardcount">0</span></div>\
     </div>\
 </div>';
 

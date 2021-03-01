@@ -46,6 +46,8 @@ function (dojo, declare) {
 
             this.player_token_area = [];
 
+            this.player_counts = [];
+
             this.clientStateArgs = {};
             this.handles = [];
 
@@ -82,8 +84,11 @@ function (dojo, declare) {
                     x: x
                 }), playerBoardDiv);
                 $('coincount_' + player_id).innerHTML = gamedatas.players[player_id].coins;
-                $('tokencount_' + player_id).innerHTML = 0;
+                $('tokencount_' + player_id).innerHTML = gamedatas.counts[player_id].tokens;
+                $('cardcount_' + player_id).innerHTML = gamedatas.counts[player_id].cards;
             }
+
+            this.player_counts = gamedatas.counts;
             
             for ( var row = 0; row <= 1; row++ ) {
                 this.market[row] = [];
@@ -390,8 +395,11 @@ function (dojo, declare) {
                 case 'purchase':
                     dojo.query('.market_card').forEach(
                         function (node, index) {
-                            dojo.addClass(node, 'possibleCard');
-                            this.handles.push(dojo.connect(node,'onclick', this, 'onCard'));
+                            var cost = node.id.split('_')[2];
+                            if (cost <= this.player_counts[this.player_id].coins) {
+                                dojo.addClass(node, 'possibleCard');
+                                this.handles.push(dojo.connect(node,'onclick', this, 'onCard'));
+                            }
                         }, this);
                     break;
                 case 'play':
@@ -681,10 +689,13 @@ function (dojo, declare) {
 
         notif_updatePlayerCounts: function( notif )
         {
-             for (var player_id in notif.args.counts) {
-                 $('coincount_' + player_id).innerHTML = notif.args.counts[player_id].coins;
-             };
- 
+            this.player_counts = notif.args.counts;
+
+            for (var player_id in notif.args.counts) {
+                $('coincount_' + player_id).innerHTML = notif.args.counts[player_id].coins;
+                $('tokencount_' + player_id).innerHTML = notif.args.counts[player_id].tokens;
+                $('cardcount_' + player_id).innerHTML = notif.args.counts[player_id].cards;
+            };
         },
 
         notif_log : function(notif) {
