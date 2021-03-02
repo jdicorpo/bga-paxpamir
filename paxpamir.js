@@ -51,6 +51,9 @@ function (dojo, declare) {
             this.clientStateArgs = {};
             this.handles = [];
 
+            this.remaining_actions = [];
+            this.unavailable_cards = [];
+
         },
         
         /*
@@ -215,6 +218,7 @@ function (dojo, declare) {
             {
             case 'playerActions':
                 this.remaining_actions = args.args.remaining_actions;
+                this.unavailable_cards = args.args.unavailable_cards;
                 break;
             
             case 'dummmy':
@@ -396,7 +400,8 @@ function (dojo, declare) {
                     dojo.query('.market_card').forEach(
                         function (node, index) {
                             var cost = node.id.split('_')[2];
-                            if (cost <= this.player_counts[this.player_id].coins) {
+                            var card_id = node.id.split('_')[5];
+                            if ((cost <= this.player_counts[this.player_id].coins) && (! this.unavailable_cards.includes('card_'+card_id) )) {
                                 dojo.addClass(node, 'possibleCard');
                                 this.handles.push(dojo.connect(node,'onclick', this, 'onCard'));
                             }

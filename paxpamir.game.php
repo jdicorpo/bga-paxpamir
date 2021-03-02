@@ -258,6 +258,24 @@ class paxpamir extends Table
         ) );
     }
 
+    function getUnavailableCards() {
+
+        $result = array();
+        
+        for ($i = 0; $i < 2; $i++) {
+            for ($j = 0; $j < 6; $j++) {
+                $res = $this->tokens->getTokensOfTypeInLocation('card', 'market_'.$i.'_'.$j, 1 );
+                $card = array_shift( $res );
+                if (($card !== NULL) and ($card['state'] == 1)) {
+                    $result[] = $card['key'];
+                }
+            }
+        }
+
+        return $result;
+
+    }
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
@@ -278,6 +296,7 @@ class paxpamir extends Table
         $card_name = $this->token_types[$card_id]['name'];
         $market_location = $card['location'];
         $row = explode("_", $market_location)[1];
+        $row_alt = ($row == 0) ? 1 : 0;
         $col = $cost = explode("_", $market_location)[2];
 
         if ($this->getGameStateValue("remaining_actions") > 0) {
@@ -309,10 +328,14 @@ class paxpamir extends Table
             for ($i = $col-1; $i >= 0; $i--) {
                 $location = 'market_'.$row.'_'.$i;
                 $m_card = $this->tokens->getTokenOnLocation($location);
-                // echo "<pre>"; var_dump($m_card); echo "</pre>"; die('ok');
+                if ($m_card == NULL) {
+                    $location = 'market_'.$row_alt.'_'.$i;
+                    $m_card = $this->tokens->getTokenOnLocation($location);
+                }
                 if ($m_card !== NULL) {
                     $c = $this->tokens->getTokenOnTop('pool');
                     $this->tokens->moveToken($c['key'], $m_card["key"]); 
+                    $this->tokens->setTokenState($m_card["key"], 1);
                     $updated_cards[] = array(
                         'location' => $location,
                         'card_id' => $m_card["key"],
@@ -412,6 +435,7 @@ class paxpamir extends Table
     {
         return array(
             'remaining_actions' => $this->getGameStateValue("remaining_actions"),
+            'unavailable_cards' => $this->getUnavailableCards(),
         );
     }
 
@@ -436,46 +460,52 @@ class paxpamir extends Table
             $card = $this->tokens->getTokenOnLocation($from_location);
             if ($card == null) {
                 $empty_top[] = $i;
-            } elseif (count($empty_top) > 0) {
-                $to_locaction = 'market_0_'.array_shift($empty_top);
-                $this->tokens->moveToken($card['key'], $to_locaction);
-                $empty_top[] = $i;
-                $card_moves[] = array(
-                    'card_id' => $card['key'], 
-                    'from' => $from_location, 
-                    'to' => $to_locaction
-                );
-                
-                self::notifyAllPlayers( "refreshMarket", '', array(
-                    'card_moves' => $card_moves,
-                    'new_cards' => $new_cards,
-                ) );
-        
-                $this->gamestate->nextState( 'clean_up' );
-                return;
+            } else {
+                $this->tokens->setTokenState($card["key"], 0);
+                if (count($empty_top) > 0) {
+                    $to_locaction = 'market_0_'.array_shift($empty_top);
+                    $this->tokens->moveToken($card['key'], $to_locaction);
+                    $empty_top[] = $i;
+                    $card_moves[] = array(
+                        'card_id' => $card['key'], 
+                        'from' => $from_location, 
+                        'to' => $to_locaction
+                    );
+                    
+                    self::notifyAllPlayers( "refreshMarket", '', array(
+                        'card_moves' => $card_moves,
+                        'new_cards' => $new_cards,
+                    ) );
+            
+                    $this->gamestate->nextState( 'clean_up' );
+                    return;
+                }
             }
             
             $from_location = 'market_1_'.$i;
             $card = $this->tokens->getTokenOnLocation($from_location);
             if ($card == null) {
                 $empty_bottom[] = $i;
-            } elseif (count($empty_bottom) > 0) {
-                $to_locaction = 'market_1_'.array_shift($empty_bottom);
-                $this->tokens->moveToken($card['key'], $to_locaction );
-                $empty_bottom[] = $i;
-                $card_moves[] = array( 
-                    'card_id' => $card['key'], 
-                    'from' => $from_location, 
-                    'to' => $to_locaction
-                );
+            } else {
+                $this->tokens->setTokenState($card["key"], 0);
+                if (count($empty_bottom) > 0) {
+                    $to_locaction = 'market_1_'.array_shift($empty_bottom);
+                    $this->tokens->moveToken($card['key'], $to_locaction );
+                    $empty_bottom[] = $i;
+                    $card_moves[] = array( 
+                        'card_id' => $card['key'], 
+                        'from' => $from_location, 
+                        'to' => $to_locaction
+                    );
 
-                self::notifyAllPlayers( "refreshMarket", '', array(
-                    'card_moves' => $card_moves,
-                    'new_cards' => $new_cards,
-                ) );
-        
-                $this->gamestate->nextState( 'clean_up' );
-                return;
+                    self::notifyAllPlayers( "refreshMarket", '', array(
+                        'card_moves' => $card_moves,
+                        'new_cards' => $new_cards,
+                    ) );
+            
+                    $this->gamestate->nextState( 'clean_up' );
+                    return;
+                }
             }
 
         }
