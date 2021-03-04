@@ -164,7 +164,8 @@ class paxpamir extends Table
   
         $players = $this->loadPlayersBasicInfos();
         foreach ( $players as $player_id => $player_info ) {
-            $result['court'][$player_id] = $this->tokens->getTokensInLocation('court_'.$player_id);
+            $result['court'][$player_id] = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
+            // $result['court'][$player_id] = $this->tokens->getTokensInLocation('court_'.$player_id);
             $result['tokens'][$player_id] = $this->tokens->getTokensInLocation('tokens_'.$player_id);
             $result['counts'][$player_id]['coins'] = $this->getPlayerCoins($player_id );
             $result['counts'][$player_id]['tokens'] = count($this->tokens->getTokensOfTypeInLocation('token', 'tokens_'.$player_id ));
@@ -366,24 +367,36 @@ class paxpamir extends Table
 
     }
 
-    function playCard( $card_id )
+    function playCard( $card_id, $left_side = true )
     {
         self::checkAction( 'play' );
 
         $player_id = self::getActivePlayerId();
         $card = $this->tokens->getTokenInfo($card_id);
+        $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
         $card_name = $this->token_types[$card_id]['name'];
 
         if ($this->getGameStateValue("remaining_actions") > 0) {
-            $this->tokens->moveToken($card_id, 'court_'.$player_id);
+            if ($left_side) {
+                for ($i = 0; $i < count($court_cards); $i++) {
+                    // $this->tokens->setTokenState($court_cards[$i].key, $court_cards[$i].state+1);
+                    $this->tokens->setTokenState($court_cards[$i]['key'], $i+2);
+                }
+                $this->tokens->moveToken($card_id, 'court_'.$player_id, 1);
+                $message = clienttranslate( '${player_name} played ${card_name} to the left side of their court' );
+            } else {
+                $this->tokens->moveToken($card_id, 'court_'.$player_id, count($court_cards) + 1);
+                $message = clienttranslate( '${player_name} played ${card_name} to the right side of their court' );
+            }
             $this->incGameStateValue("remaining_actions", -1);
+            $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
 
-            self::notifyAllPlayers( "playCard", clienttranslate( '${player_name} played ${card_name}' ), array(
+            self::notifyAllPlayers( "playCard", $message, array(
                 'player_id' => $player_id,
                 'player_name' => self::getActivePlayerName(),
                 'card' => $card,
                 'card_name' => $card_name,
-                'side' => 'left',
+                'court_cards' => $court_cards,
                 'i18n' => array( 'card_name' ),
             ) );
         }

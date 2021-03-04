@@ -51,7 +51,8 @@
     {
         self::setAjaxMode();     
         $card_id = self::getArg( "card_id", AT_alphanum, true );
-        $result = $this->game->playCard($card_id);
+        $left_side = self::getArg( "left_side", AT_bool, true );
+        $result = $this->game->playCard($card_id, $left_side);
         self::ajaxResponse( );
     }
 

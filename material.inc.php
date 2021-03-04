@@ -98,7 +98,7 @@ $this->token_types = array(
 ),
 'herat' => array(
   'type' => 'region',
-  'name' => clienttranslate("Persia"),
+  'name' => clienttranslate("Herat"),
   'left' => 330, 'top' => 370, 'width' => 200, 'height' => 230, 'borders' => 'persia, transcaspia, kabul, kandahar',
 ),
 'kandahar' => array(
@@ -116,10 +116,45 @@ $this->token_types = array(
   'name' => clienttranslate("Transcaspia-Kabul Border"),
   'left' => 410, 'top' => 100, 'width' => 75, 'height' => 200, 'regions' => 'transcaspia, kabul',
 ),
+'border_kabul_punjab' => array(
+  'type' => 'border',
+  'name' => clienttranslate("Kabul-Punjab Border"),
+  'left' => 820, 'top' => 100, 'width' => 100, 'height' => 250, 'regions' => 'transcaspia, kabul',
+),
 'border_transcaspia_herat' => array(
   'type' => 'border',
-  'name' => clienttranslate("Transcaspia-Kabul Border"),
-  'left' => 860, 'top' => 280, 'width' => 100, 'height' => 320, 'regions' => 'transcaspia, herat',
+  'name' => clienttranslate("Transcaspia-Herat Border"),
+  'left' => 280, 'top' => 280, 'width' => 150, 'height' => 100, 'regions' => 'transcaspia, herat',
+),
+'border_herat_kabul' => array(
+  'type' => 'border',
+  'name' => clienttranslate("Herat-Kabul Border"),
+  'left' => 440, 'top' => 280, 'width' => 150, 'height' => 100, 'regions' => 'transcaspia, herat',
+),
+'border_transcaspia_persia' => array(
+  'type' => 'border',
+  'name' => clienttranslate("Transcaspia-Persia Border"),
+  'left' => 100, 'top' => 330, 'width' => 200, 'height' => 60, 'regions' => 'transcaspia, persia',
+),
+'border_kandahar_kabul' => array(
+  'type' => 'border',
+  'name' => clienttranslate("Kandahar-Kabul Border"),
+  'left' => 590, 'top' => 330, 'width' => 200, 'height' => 60, 'regions' => 'transcaspia, persia',
+),
+'border_persia_herat' => array(
+  'type' => 'border',
+  'name' => clienttranslate("Persia-Herat Border"),
+  'left' => 280, 'top' => 400, 'width' => 60, 'height' => 200, 'regions' => 'herat, persia',
+),
+'border_herat_kandahar' => array(
+  'type' => 'border',
+  'name' => clienttranslate("Herat-Kandahar Border"),
+  'left' => 540, 'top' => 400, 'width' => 60, 'height' => 200, 'regions' => 'herat, persia',
+),
+'border_kandahar_punjab' => array(
+  'type' => 'border',
+  'name' => clienttranslate("Kandahar-Punjab Border"),
+  'left' => 800, 'top' => 400, 'width' => 60, 'height' => 200, 'regions' => 'herat, persia',
 ),
 'special_1' => array(
   'type' => 'special',

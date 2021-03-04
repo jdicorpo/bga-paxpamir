@@ -11,11 +11,18 @@ token_colors|token_colors|token_colors { 'd30505' => 3, '305a72' => 1, 'cfa580' 
 transcaspia|Transcaspia|region {'left' => 100, 'top' => 100, 'width' => 270, 'height' => 220, 'borders' => 'persia, herat, kabul'}||||||||||
 kabul|Kabul|region {'left' => 500, 'top' => 100, 'width' => 300, 'height' => 200, 'borders' => 'transcaspia, herat, kandahar, punjab'}||||||||||
 persia|Persia|region {'left' => 100, 'top' => 400, 'width' => 180, 'height' => 200, 'borders' => 'transcaspia, herat'}||||||||||
-herat|Persia|region {'left' => 330, 'top' => 370, 'width' => 200, 'height' => 230, 'borders' => 'persia, transcaspia, kabul, kandahar'}||||||||||
+herat|Herat|region {'left' => 330, 'top' => 370, 'width' => 200, 'height' => 230, 'borders' => 'persia, transcaspia, kabul, kandahar'}||||||||||
 kandahar|Kandahar|region {'left' => 600, 'top' => 400, 'width' => 200, 'height' => 200, 'borders' => 'herat, kabul, punjab'}||||||||||
 punjab|Punjab|region {'left' => 860, 'top' => 280, 'width' => 100, 'height' => 320, 'borders' => 'kabul, kandahar'}||||||||||
 border_transcaspia_kabul|Transcaspia-Kabul Border|border {'left' => 410, 'top' => 100, 'width' => 75, 'height' => 200, 'regions' => 'transcaspia, kabul'}||||||||||
-border_transcaspia_herat|Transcaspia-Kabul Border|border {'left' => 860, 'top' => 280, 'width' => 100, 'height' => 320, 'regions' => 'transcaspia, herat'}||||||||||
+border_kabul_punjab|Kabul-Punjab Border|border {'left' => 820, 'top' => 100, 'width' => 100, 'height' => 250, 'regions' => 'transcaspia, kabul'}||||||||||
+border_transcaspia_herat|Transcaspia-Herat Border|border {'left' => 280, 'top' => 280, 'width' => 150, 'height' => 100, 'regions' => 'transcaspia, herat'}||||||||||
+border_herat_kabul|Herat-Kabul Border|border {'left' => 440, 'top' => 280, 'width' => 150, 'height' => 100, 'regions' => 'transcaspia, herat'}||||||||||
+border_transcaspia_persia|Transcaspia-Persia Border|border {'left' => 100, 'top' => 330, 'width' => 200, 'height' => 60, 'regions' => 'transcaspia, persia'}||||||||||
+border_kandahar_kabul|Kandahar-Kabul Border|border {'left' => 590, 'top' => 330, 'width' => 200, 'height' => 60, 'regions' => 'transcaspia, persia'}||||||||||
+border_persia_herat|Persia-Herat Border|border {'left' => 280, 'top' => 400, 'width' => 60, 'height' => 200, 'regions' => 'herat, persia'}||||||||||
+border_herat_kandahar|Herat-Kandahar Border|border {'left' => 540, 'top' => 400, 'width' => 60, 'height' => 200, 'regions' => 'herat, persia'}||||||||||
+border_kandahar_punjab|Kandahar-Punjab Border|border {'left' => 800, 'top' => 400, 'width' => 60, 'height' => 200, 'regions' => 'herat, persia'}||||||||||
 |Indispensable Advisors|special|||||||||Your spies cannot be removed in battles with other spies.|
 |Insurrection|special|||||||||After resolving a Dominance Check, place two Afghan armies in Kabul.|
 |Claim of Ancient Lineage|special|||||||||Your spies cannot be removed in battles with other spies.|

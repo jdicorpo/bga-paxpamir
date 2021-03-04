@@ -1,3 +1,7 @@
 TODO:
-* support other maps
+* tokens on column 0 stay on refresh
+* play card - left / right
+* coalition pieces - stock counts
+* player tokens?
+* 
 

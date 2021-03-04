@@ -41,6 +41,12 @@
             </div>
         </div>
         <div id="board">
+            <!-- <img id="map" src='img/paxpamir_board.jpg' border="0" width="1054" height="692" orgWidth="1054" orgHeight="692" usemap="#transcapia" alt="" />
+            <map name="transcapia" id="map_transcapia">
+            <area shape="poly" coords="83,84,115,84,152,84,237,83,338,85,445,85,458,84,460,103,460,125,460,150,459,177,456,195,454,225,447,248,442,271,431,285,417,289,410,292,400,299,392,306,381,315,371,323,357,329,347,338,338,343,328,351,320,363,312,373,303,385,297,389,286,390,276,387,262,384,249,380,233,375,220,371,203,367,191,365,174,365,160,362,147,360,134,361,121,360,109,361,99,361,88,362,79,363" style="outline:none;" target="_self"  \
+                onmouseover="if(document.images) document.getElementById('map').src= '';" onmouseout="if(document.images) document.getElementById('map').src= 'img/paxpamir_board.jpg';"  />
+            </map> -->
+
             <!-- BEGIN region -->
             <div id="{ID}" class="region" style="left:{LEFT}px; top:{TOP}px; width:{WIDTH}px; height:{HEIGHT}px;"></div>
             <!-- END region -->

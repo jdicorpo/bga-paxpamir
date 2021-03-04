@@ -118,7 +118,7 @@ function (dojo, declare) {
                 this.setup_cards(this.court[player_id], id, 'court');
 
                 for (var c in gamedatas.court[player_id]) {
-                    this.placeCard(this.court[player_id], c );
+                    this.placeCard(this.court[player_id], gamedatas.court[player_id][c]['key'], gamedatas.court[player_id][c]['state'] );
                 }
                 this.player_token_area[player_id] = new ebg.stock();
                 this.player_token_area[player_id].create( this, $( 'tokens_' + player_id ), this.tokenwidth, this.tokenheight );
@@ -154,7 +154,7 @@ function (dojo, declare) {
                 background-image:url('${image}');\"><div id=\"${id}_tokens\" class=\"card_token_area\"></div></div>";
             
             for (var c in this.gamedatas.cards) {
-                stock.addItemType( this.gamedatas.cards[c], 1, g_gamethemeurl + 'img/cards.jpg', this.gamedatas.cards[c].split('_')[1] -1 );
+                stock.addItemType( this.gamedatas.cards[c], 0, g_gamethemeurl + 'img/cards.jpg', this.gamedatas.cards[c].split('_')[1] -1 );
             }
         },
 
@@ -274,6 +274,12 @@ function (dojo, declare) {
                         this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
                         break;
 
+                    case 'client_confirmPlay':
+                        this.addActionButton( 'left_side_btn', _('<< LEFT'), 'onLeft', null, false, 'blue' );
+                        this.addActionButton( 'right_side_btn', _('RIGHT >>'), 'onRight', null, false, 'blue' );
+                        this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
+                        break;
+
                     case 'client_endTurn':
                         this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'red' );
                         this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'gray' );
@@ -345,8 +351,13 @@ function (dojo, declare) {
 
         },
 
-        placeCard : function(location, id) {
+        placeCard : function(location, id, order = null) {
             console.log( 'placeCard' );
+
+            if (order != null) {
+                x = {}; x[id] = order;
+                location.changeItemsWeight(x);
+            }
 
             location.addToStockWithId(id, id, 'deck');
 
@@ -356,7 +367,15 @@ function (dojo, declare) {
 
         },
 
-        moveCard : function(id, from_location, to_location) {
+        updateCard : function(location, id, order) {
+            console.log( 'updateCard' );
+
+            x = {}; x[id] = order;
+            location.changeItemsWeight(x);
+
+        },
+
+        moveCard : function(id, from_location, to_location, order = null) {
             console.log( 'moveCard' );
             var card_tokens_list = this.card_tokens[id].getAllItems();
 
@@ -366,6 +385,9 @@ function (dojo, declare) {
                 from_div = null;
             }
             if (to_location !== null) {
+                if (order != null) {
+                    to_location.changeItemsWeight({ id: order });
+                }
                 var node_id = to_location.control_name + '_item_'+ id + '_tokens';
                 to_location.addToStockWithId(id, id, from_div);
 
@@ -551,10 +573,12 @@ function (dojo, declare) {
                         var node = $( card_id );
                         dojo.addClass(node, 'selected');
                         var card_id = 'card_' + this.selectedCard.split('_')[4];
-                        this.ajaxcall( "/paxpamir/paxpamir/playCard.html", { 
-                            lock: true,
-                            card_id:card_id,
-                        }, this, function( result ) {} );  
+                        this.setClientState("client_confirmPlay", { descriptionmyturn : "Select which side of court to play card:"});
+                        // this.ajaxcall( "/paxpamir/paxpamir/playCard.html", { 
+                        //     lock: true,
+                        //     card_id:card_id,
+                        //     left_side: true,
+                        // }, this, function( result ) {} );  
                         break;
 
                     default:
@@ -583,7 +607,7 @@ function (dojo, declare) {
                         card_id:card_id,
                     }, this, function( result ) {} );  
                     break;
-                    
+                   
                 case 'pass':
                     this.ajaxcall( "/paxpamir/paxpamir/passAction.html", { 
                         lock: true,
@@ -595,6 +619,52 @@ function (dojo, declare) {
             }
 
         }, 
+
+        onLeft: function()
+        {
+            console.log( 'onLeft' );
+
+            switch (this.selectedAction) {
+                case 'play':    
+                    this.clearLastAction();
+                    // var node = $( card_id );
+                    // dojo.addClass(node, 'selected');
+                    var card_id = 'card_' + this.selectedCard.split('_')[4];
+                    this.ajaxcall( "/paxpamir/paxpamir/playCard.html", { 
+                        lock: true,
+                        card_id: card_id,
+                        left_side: true,
+                    }, this, function( result ) {} );  
+                    break;
+
+                default:
+                    break;
+            }
+
+        }, 
+
+        onRight: function()
+        {
+            console.log( 'onRight' );
+
+            switch (this.selectedAction) {
+                case 'play':    
+                    this.clearLastAction();
+                    // var node = $( card_id );
+                    // dojo.addClass(node, 'selected');
+                    var card_id = 'card_' + this.selectedCard.split('_')[4];
+                    this.ajaxcall( "/paxpamir/paxpamir/playCard.html", { 
+                        lock: true,
+                        card_id: card_id,
+                        left_side: false,
+                    }, this, function( result ) {} );  
+                    break;
+
+                default:
+                    break;
+            }
+
+        },
         
         
         ///////////////////////////////////////////////////
@@ -636,6 +706,8 @@ function (dojo, declare) {
             var row = notif.args.market_location.split('_')[1];
             var col = notif.args.market_location.split('_')[2];
 
+            this.card_tokens[notif.args.card.key].removeAll();
+
             if (notif.args.player_id == this.player_id) {
                 this.moveCard(notif.args.card.key, this.market[row][col], this.player_hand);
             } else {
@@ -660,11 +732,24 @@ function (dojo, declare) {
             this.clearLastAction();
             var player_id = notif.args.player_id;
 
+            notif.args.court_cards.forEach (
+                function (card, index) {
+                    this.updateCard(
+                        this.court[player_id], 
+                        card.key,
+                        card.state );
+                }, this);
+
+            this.card_tokens[notif.args.card.key].removeAll();
+
             if (player_id == this.player_id) {
                 this.moveCard(notif.args.card.key, this.player_hand, this.court[player_id]);
             } else {
                 this.moveCard(notif.args.card.key, null, this.court[player_id]);
             }
+
+            this.court[player_id].updateDisplay();
+
         },
 
         notif_refreshMarket: function( notif )

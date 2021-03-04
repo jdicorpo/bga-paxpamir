@@ -217,13 +217,13 @@
 }
 
 .region {
-    /* background-color: palevioletred; */
+    background-color: palevioletred;
     opacity: 0.5;
     position: absolute;
 }
 
 .border {
-    /* background-color: paleturquoise; */
+    background-color: paleturquoise;
     opacity: 0.5;
     position: absolute;
 }
