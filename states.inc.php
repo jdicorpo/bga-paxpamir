@@ -51,15 +51,16 @@
 
 // define contants for state ids
 if (!defined('STATE_END_GAME')) { // ensure this block is only invoked once, since it is included multiple times
-    define("STATE_PLAYER_ACTIONS", 2);
-    define("STATE_DISCARD_COURT", 3);
-    define("STATE_DISCARD_HAND", 4);
-    define("STATE_EVENTS", 5);
-    define("STATE_REFRESH_MARKET", 6);
-    define("STATE_DOMINANCE_CHECK", 7);
-    define("STATE_NEXT_PLAYER", 8);
-    define("STATE_OVERTHROW", 9);
-    define("STATE_FINAL", 10);
+    define("STATE_SETUP", 2);
+    define("STATE_PLAYER_ACTIONS", 3);
+    define("STATE_DISCARD_COURT", 4);
+    define("STATE_DISCARD_HAND", 5);
+    define("STATE_EVENTS", 6);
+    define("STATE_REFRESH_MARKET", 7);
+    define("STATE_DOMINANCE_CHECK", 8);
+    define("STATE_NEXT_PLAYER", 9);
+    define("STATE_OVERTHROW", 10);
+    define("STATE_FINAL", 11);
     define("STATE_END_GAME", 99);
 }
  
@@ -75,6 +76,17 @@ $machinestates = array(
     ),
     
     // Note: ID=2 => your first state
+
+    STATE_SETUP => array(
+        "name" => "setup",
+        "description" => clienttranslate('${actplayer} must choose a loyalty'),
+        "descriptionmyturn" => clienttranslate('${you} must choose a loyalty'),
+        "type" => "activeplayer",
+        "possibleactions" => array( "choose_loyalty" ),
+        "transitions" => array( 
+            "next" => STATE_NEXT_PLAYER
+        )
+    ),
 
     STATE_PLAYER_ACTIONS => array(
     		"name" => "playerActions",
@@ -107,6 +119,7 @@ $machinestates = array(
         "updateGameProgression" => true,
         "transitions" => array( 
             "next_turn" => STATE_PLAYER_ACTIONS,
+            "setup" => STATE_SETUP,
             "final" => STATE_FINAL 
         )
     ),

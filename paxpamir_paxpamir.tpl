@@ -80,6 +80,10 @@
             </div>
             <div id="title_sep_{PLAYER_COLOR}"></div>
             <!-- <div id="player_adventurer_{PLAYER_ID}" class="player_adventurer"></div> -->
+            <div id="loyalty_{PLAYER_ID}" class="player_loyalty_area">
+                <div id="loyalty_wheel_{PLAYER_ID}" class="loyalty_wheel"></div>
+                <div id="loyalty_holder_{PLAYER_ID}" class="loyalty_holder"></div>
+            </div>
             <div id="court_{PLAYER_ID}" class="player_card_area"></div>
             <div id="tokens_{PLAYER_ID}" class="player_token_area"></div>
             <!-- <div id="player_figure_area_{PLAYER_ID}" class="player_figure_area"></div> -->
@@ -103,11 +107,16 @@ var jstpl_coin='<div id="${id}" class="token coin" style="background-position:-2
 var jstpl_token='<div id="${id}" class="token coin" style="background-position:-${x}px 0"></div>';
 var jstpl_player_board = '\<div id="p_board_${id}" class="p_board">\
     <div id="p_board_icon_${id}" class="p_board_icons">\
+    <div id="loyalty_icon_${id}" class="loyalty_icon"><span id="influence_${id}"  class="influence">0</span></div>\
     <div id="coins_${id}" class="coin_icon"><span id="coincount_${id}"  class="coincount">0</span></div>\
     <div id="tokens_${id}" class="token_icon" style="background-position:-${x}px 0"><span id="tokencount_${id}"  class="tokencount">0</span></div>\
     <div id="cards_${id}" class="card_icon"><span id="cardcount_${id}"  class="cardcount">0</span></div>\
     </div>\
 </div>';
+var jstpl_loyalty_icon='<div id="loyalty_icon_${id}" class="loyalty_icon" style="background-position:-${x}px 0"> \
+    <span id="influence_${id}"  class="influence">0</span>\
+    </div>';
+var jstpl_loyalty_holder='<div id="loyalty_holder_${id}" class="loyalty_holder" style="background-position:-${x}px 0"></div>';
 
 </script>  
 

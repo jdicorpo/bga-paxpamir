@@ -34,7 +34,8 @@ class paxpamir extends Table
         parent::__construct();
         
         self::initGameStateLabels( array( 
-            "remaining_actions" => 10,
+            "setup" => 10,
+            "remaining_actions" => 11,
 
             //    "my_first_global_variable" => 10,
             //    "my_second_global_variable" => 11,
@@ -121,6 +122,7 @@ class paxpamir extends Table
         $this->tokens->createTokensPack("coin_{INDEX}", "pool", 36);
 
         // Init global values with their initial values
+        self::setGameStateInitialValue( 'setup', 1 );
         self::setGameStateInitialValue( 'remaining_actions', 2 );
         
         // Init game statistics
@@ -175,6 +177,7 @@ class paxpamir extends Table
         $result['hand'] = $this->tokens->getTokensInLocation('hand_'.$current_player_id);
 
         $result['token_types'] = $this->token_types;
+        $result['loyalty'] = $this->loyalty;
         $result['cards'] = array();
 
         foreach ($this->token_types as $key => $value) {
@@ -244,6 +247,16 @@ class paxpamir extends Table
         return $suits;
     }
 
+    function getPlayerInfluence($player_id) {
+        $influence = 1;
+        $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
+        for ($i = 0; $i < count($court_cards); $i++) {
+            $card_info = $this->token_types[$court_cards[$i]['key']];
+            $card_info['suit'] += $card_info['rank'];
+        }
+        return $influence;
+    }
+
     function getPlayerCoins($player_id) {
         $sql = "SELECT coins FROM player WHERE  player_id='$player_id' ";
         return $this->getUniqueValueFromDB($sql);
@@ -254,6 +267,17 @@ class paxpamir extends Table
         $coins += $value;
         $sql = "UPDATE player SET coins='$coins' 
                 WHERE  player_id='$player_id' ";
+        self::DbQuery( $sql );
+    }
+
+    function getPlayerLoyalty($player_id) {
+        $sql = "SELECT loyalty FROM player WHERE  player_id='$player_id' ";
+        return $this->getUniqueValueFromDB($sql);
+    }
+
+    function setPlayerLoyalty($player_id, $coalition) {
+        $sql = "UPDATE player SET loyalty='$coalition' 
+        WHERE  player_id='$player_id' ";
         self::DbQuery( $sql );
     }
 
@@ -448,6 +472,27 @@ class paxpamir extends Table
         
     }
 
+    function chooseLoyalty( $coalition )
+    {
+        self::checkAction( 'choose_loyalty' );
+
+        $player_id = self::getActivePlayerId();
+        $coalition_name = $this->loyalty[$coalition]['name'];
+
+        $this->setPlayerLoyalty($player_id, $coalition);
+
+        // Notify
+        self::notifyAllPlayers( "chooseLoyalty", clienttranslate( '${player_name} selected ${coalition_name}.' ), array(
+            'player_id' => $player_id,
+            'player_name' => self::getActivePlayerName(),
+            'coalition' => $coalition,
+            'coalition_name' => $coalition_name
+        ) );
+
+        $this->gamestate->nextState( 'next' );
+
+    }
+
     
 //////////////////////////////////////////////////////////////////////////////
 //////////// Game state arguments
@@ -567,13 +612,37 @@ class paxpamir extends Table
 
     function stNextPlayer()
     {
+        $setup = $this->getGameStateValue("setup");
         // Active next player
-        $player_id = self::activeNextPlayer();
+        if ($setup == 1) {
+            // setup
+            $player_id = self::activeNextPlayer();
+            $loyalty = $this->getPlayerLoyalty($player_id);
+            if ($this->getPlayerLoyalty($player_id) == "null") {
+                // choose next loyalty
+                $this->giveExtraTime($player_id);
 
-        $this->setGameStateValue("remaining_actions", 2);
-        $this->giveExtraTime($player_id);
+                $this->gamestate->nextState( 'setup' );
+            } else {
+                // setup complete, go to player actions
+                $player_id = self::activePrevPlayer();
+                $this->giveExtraTime($player_id);
 
-        $this->gamestate->nextState( 'next_turn' );
+                $this->setGameStateValue("setup", 0);
+                $this->setGameStateValue("remaining_actions", 2);
+
+                $this->gamestate->nextState( 'next_turn' );
+            }
+
+        } else {
+            // player turn
+            $player_id = self::activeNextPlayer();
+
+            $this->setGameStateValue("remaining_actions", 2);
+            $this->giveExtraTime($player_id);
+
+            $this->gamestate->nextState( 'next_turn' );
+        }
 
     }
     

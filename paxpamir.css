@@ -99,6 +99,24 @@
     left: 12px;
 }
 
+.loyalty_icon{
+    display: inline-block;
+    height: 44px;
+    width: 44px;
+    background-image: url(img/loyalty_icon.png);
+    background-clip: content-box;
+    background-size: 300% 100%;
+    position: relative;
+    margin: 5px;
+}
+
+.influence {
+    position: absolute;
+    color: white;
+    bottom: 8px;
+    left: 20px;
+}
+
 .token_icon {
     background-image: url(img/tokens.png);
     /* background-size: 20%; */
@@ -301,8 +319,6 @@
     left: 180px;
 }
 
-
-
 .side_title_wrapper {
     height: 248px;
     width: 25px;
@@ -340,12 +356,59 @@
     /* background-image: url('img/cards.jpg'); */
 }
 
+.player_loyalty_area {
+    display: inline-block;
+    vertical-align: top;
+    height: 150px;
+    width: 148px;
+    margin-left: 50px;
+    background-clip: content-box;
+}
+
+.loyalty_wheel {
+    background-image: url('img/loyality.png');
+    display: inline-block;
+    height: 150px;
+    width: 148px;
+    /* margin-left: 50px; */
+    background-clip: content-box;
+    /* left: 0px;
+    top: 0px;
+    position: absolute; */
+    transform:rotate(-60deg);
+}
+
+.loyalty_holder {
+    background-image: url('img/loyality.png');
+    display: inline-block;
+    height: 150px;
+    width: 148px;
+    /* margin-left: 50px; */
+    background-clip: content-box;
+    background-position:-148px 0;
+    left: 60px;
+    top: 10px;
+    position: absolute;
+}
+
+.wheel.afghan {
+    transform:rotate(0deg);
+}
+
+.wheel.russian {
+    transform:rotate(-120deg);
+}
+
+.wheel.british {
+    transform:rotate(120deg);
+}
+
 .player_card_area {
     /* margin-left: 50px; */
     display: inline-block;
     vertical-align: top;
     width: 70%;
-    margin-left: 50px;
+    margin-left: 30px;
     min-height: 251px;
 }
 

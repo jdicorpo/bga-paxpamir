@@ -89,6 +89,17 @@ function (dojo, declare) {
                 $('coincount_' + player_id).innerHTML = gamedatas.players[player_id].coins;
                 $('tokencount_' + player_id).innerHTML = gamedatas.counts[player_id].tokens;
                 $('cardcount_' + player_id).innerHTML = gamedatas.counts[player_id].cards;
+
+                var loyalty = gamedatas.players[player_id].loyalty;
+                if (loyalty != "null") {
+                    var x = this.gamedatas.loyalty[loyalty].icon * 44;
+                    dojo.place(this.format_block('jstpl_loyalty_icon', {
+                        id: player_id,
+                        x: x
+                    }), 'loyalty_icon_' + player_id, 'replace');
+                    dojo.query('#loyalty_wheel_' + player_id + ' .wheel').removeClass();
+                    dojo.addClass('loyalty_wheel_' + player_id, 'wheel ' + loyalty);
+                }
             }
 
             this.player_counts = gamedatas.counts;
@@ -252,6 +263,12 @@ function (dojo, declare) {
             {            
                 switch( stateName )
                 {
+                    case 'setup':
+                        this.addActionButton( 'afghan_btn', _('Afghan'), 'onAfghan', null, false, 'blue' );
+                        this.addActionButton( 'russian_btn', _('Russian'), 'onRussian', null, false, 'blue' );
+                        this.addActionButton( 'british_btn', _('British'), 'onBritish', null, false, 'blue' );
+                        break;
+
                     case 'playerActions':
                         var main = $('pagemaintitletext');
                         if (args.remaining_actions > 0) {
@@ -665,6 +682,39 @@ function (dojo, declare) {
             }
 
         },
+
+        onAfghan: function()
+        {
+            console.log( 'onAfghan' );
+
+            this.ajaxcall( "/paxpamir/paxpamir/chooseLoyalty.html", { 
+                lock: true,
+                coalition: 'afghan',
+            }, this, function( result ) {} );  
+
+        },
+
+        onRussian: function()
+        {
+            console.log( 'onRussian' );
+
+            this.ajaxcall( "/paxpamir/paxpamir/chooseLoyalty.html", { 
+                lock: true,
+                coalition: 'russian',
+            }, this, function( result ) {} );  
+
+        },
+
+        onBritish: function()
+        {
+            console.log( 'onBritish' );
+
+            this.ajaxcall( "/paxpamir/paxpamir/chooseLoyalty.html", { 
+                lock: true,
+                coalition: 'british',
+            }, this, function( result ) {} );  
+
+        },
         
         
         ///////////////////////////////////////////////////
@@ -683,6 +733,8 @@ function (dojo, declare) {
         {
             console.log( 'notifications subscriptions setup' );
 
+            dojo.subscribe( 'chooseLoyalty', this, "notif_chooseLoyalty" );
+
             dojo.subscribe( 'purchaseCard', this, "notif_purchaseCard" );
             this.notifqueue.setSynchronous( 'purchaseCard', 2000 );
 
@@ -696,6 +748,21 @@ function (dojo, declare) {
             dojo.subscribe( 'log', this, "notif_log");
 
         },  
+
+        notif_chooseLoyalty: function( notif ) {
+            console.log( 'notif_chooseLoyalty' );
+            console.log( notif );
+
+            var loyalty = gamedatas.players[player_id].loyalty;
+            if (loyalty != "null") {
+                var x = this.gamedatas.loyalty[loyalty].icon * 44;
+                dojo.place(this.format_block('jstpl_loyalty_icon', {
+                    id: player_id,
+                    x: x
+                }), 'loyalty_icon_' + player_id, 'replace');
+            }
+
+        },
 
         notif_purchaseCard: function( notif )
         {
