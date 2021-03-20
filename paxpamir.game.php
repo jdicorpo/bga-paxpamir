@@ -229,6 +229,21 @@ class paxpamir extends Table
         return (substr($string, 0, $len) === $startString); 
     } 
 
+    function getPlayerSuits($player_id) {
+        $suits = array (
+            'political' => 0,
+            'military' => 0,
+            'economic' => 0,
+            'intelligence' => 0
+        );
+        $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
+        for ($i = 0; $i < count($court_cards); $i++) {
+            $card_info = $this->token_types[$court_cards[$i]['key']];
+            $suits[$card_info['suit']] += $card_info['rank'];
+        }
+        return $suits;
+    }
+
     function getPlayerCoins($player_id) {
         $sql = "SELECT coins FROM player WHERE  player_id='$player_id' ";
         return $this->getUniqueValueFromDB($sql);
