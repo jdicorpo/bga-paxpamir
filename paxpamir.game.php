@@ -36,6 +36,7 @@ class paxpamir extends Table
         self::initGameStateLabels( array( 
             "setup" => 10,
             "remaining_actions" => 11,
+            "favored_suit" => 12,
 
             //    "my_first_global_variable" => 10,
             //    "my_second_global_variable" => 11,
@@ -124,6 +125,7 @@ class paxpamir extends Table
         // Init global values with their initial values
         self::setGameStateInitialValue( 'setup', 1 );
         self::setGameStateInitialValue( 'remaining_actions', 2 );
+        self::setGameStateInitialValue( 'favored_suit', 0 );
         
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
@@ -180,6 +182,7 @@ class paxpamir extends Table
 
         $result['token_types'] = $this->token_types;
         $result['loyalty'] = $this->loyalty;
+        $result['suits'] = $this->suits;
         $result['cards'] = array();
 
         foreach ($this->token_types as $key => $value) {
@@ -198,6 +201,8 @@ class paxpamir extends Table
 
         $result['coins'] = $this->tokens->getTokensOfTypeInLocation('coin', null);
         // $result['tokens'] = $this->tokens->getTokensOfTypeInLocation('token', null);
+
+        $result['favored_suit'] = $this->getGameStateValue("favored_suit");
 
         return $result;
     }
@@ -444,7 +449,7 @@ class paxpamir extends Table
             ) );
 
             $this->updatePlayerCounts();
-            
+
         }
 
         if ($this->getGameStateValue("remaining_actions") > 0) {

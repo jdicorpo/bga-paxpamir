@@ -53,6 +53,10 @@
             <!-- BEGIN border -->
             <div id="{ID}" class="border" style="left:{LEFT}px; top:{TOP}px; width:{WIDTH}px; height:{HEIGHT}px;"></div>
             <!-- END border -->
+            <div id="favored_political" class="favored_suit"></div>
+            <div id="favored_intelligence" class="favored_suit"></div>
+            <div id="favored_economic" class="favored_suit"></div>
+            <div id="favored_military" class="favored_suit"></div>
             <div id="british_army"></div>
             <div id="token_black" class="token"></div>
             <div id="token_gray" class="token"></div>

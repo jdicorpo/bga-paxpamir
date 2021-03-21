@@ -292,6 +292,35 @@
     position: absolute;
 }
 
+.favored_suit {
+    width: 40px;
+    height: 40px;
+    /* background-color:palegoldenrod; */
+    /* opacity: 0.5; */
+    position: absolute;
+    /* top: 207px; */
+    left: 21px;
+    border-radius: 50%;
+}
+
+.favored {
+    background-color:palegoldenrod;
+    opacity: 0.9;
+}
+
+#favored_political {
+    top: 207px;
+}
+#favored_intelligence {
+    top: 295px;
+}
+#favored_economic {
+    top: 383px;
+}
+#favored_military {
+    top: 474px;
+}
+
 .card {
 	border-radius: 10px;
     /* box-shadow: 1px 1px 1px 0px #222; */

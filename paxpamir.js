@@ -86,7 +86,7 @@ function (dojo, declare) {
                     id: player_id,
                     x: x
                 }), playerBoardDiv);
-                
+
                 $('coincount_' + player_id).innerHTML = gamedatas.players[player_id].coins;
                 $('tokencount_' + player_id).innerHTML = gamedatas.counts[player_id].tokens;
                 $('cardcount_' + player_id).innerHTML = gamedatas.counts[player_id].cards;
@@ -111,6 +111,9 @@ function (dojo, declare) {
             }
 
             this.player_counts = gamedatas.counts;
+
+            dojo.addClass('favored_' + gamedatas.suits[gamedatas.favored_suit].suit, 'favored');
+            this.addTooltip( 'favored_' + gamedatas.suits[gamedatas.favored_suit].suit, gamedatas.suits[gamedatas.favored_suit].tooltip, '' );           
             
             for ( var row = 0; row <= 1; row++ ) {
                 this.market[row] = [];
