@@ -92,7 +92,7 @@ function (dojo, declare) {
 
                 var loyalty = gamedatas.players[player_id].loyalty;
                 if (loyalty != "null") {
-                    var x = this.gamedatas.loyalty[loyalty].icon * 44;
+                    var x = gamedatas.loyalty[loyalty].icon * 44;
                     dojo.place(this.format_block('jstpl_loyalty_icon', {
                         id: player_id,
                         x: x
@@ -753,14 +753,16 @@ function (dojo, declare) {
             console.log( 'notif_chooseLoyalty' );
             console.log( notif );
 
-            var loyalty = gamedatas.players[player_id].loyalty;
-            if (loyalty != "null") {
-                var x = this.gamedatas.loyalty[loyalty].icon * 44;
-                dojo.place(this.format_block('jstpl_loyalty_icon', {
-                    id: player_id,
-                    x: x
-                }), 'loyalty_icon_' + player_id, 'replace');
-            }
+            var loyalty = notif.args.coalition;
+            var player_id = notif.args.player_id;
+
+            var x = this.gamedatas.loyalty[loyalty].icon * 44;
+            dojo.place(this.format_block('jstpl_loyalty_icon', {
+                id: player_id,
+                x: x
+            }), 'loyalty_icon_' + player_id, 'replace');
+            dojo.query('#loyalty_wheel_' + player_id + ' .wheel').removeClass();
+            dojo.addClass('loyalty_wheel_' + player_id, 'wheel ' + loyalty);
 
         },
 
