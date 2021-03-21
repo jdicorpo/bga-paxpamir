@@ -168,6 +168,52 @@
     left: 8px;
 }
 
+.suit_icon {
+    background-image: url(img/suits.png);
+    /* background-size: 20%; */
+    /* border-radius: 3px; */
+	/* box-shadow: 1px 1px 1px 0px #222; */
+    display: inline-block;
+    width: 44px;
+    height: 44px;
+    background-clip: content-box;
+    margin: 3px;
+    /* margin-left: 5px; */
+    /* margin-top: 5px; */
+    position: relative;
+    transform: none;
+}
+
+.suitcount {
+    position: absolute;
+    color: black;
+    /* bottom: 11px; */
+    /* left: 18px; */
+    bottom: 0px;
+    left: 30px;
+    /* font-weight: 700; */
+    padding-left: 2px;
+    padding-right: 2px;
+    background-color: white;
+}
+
+.suit_icon.economic {
+    background-position:0px 0;
+}
+
+.suit_icon.military {
+    background-position:-42px 0;
+}
+
+.suit_icon.political {
+    background-position:-85px 0;
+}
+
+.suit_icon.intelligence {
+    background-position:-128px 0;
+}
+
+
 #market {
     /* width: 100%; */
     width: 1233px;
@@ -410,6 +456,10 @@
     width: 70%;
     margin-left: 30px;
     min-height: 251px;
+}
+
+#player_hand {
+    margin-left: 50px;
 }
 
 .player_token_area {

@@ -172,6 +172,8 @@ class paxpamir extends Table
             $result['counts'][$player_id]['coins'] = $this->getPlayerCoins($player_id );
             $result['counts'][$player_id]['tokens'] = count($this->tokens->getTokensOfTypeInLocation('token', 'tokens_'.$player_id ));
             $result['counts'][$player_id]['cards'] = count($this->tokens->getTokensOfTypeInLocation('card', 'hand_'.$player_id ));
+            $result['counts'][$player_id]['suits'] = $this->getPlayerSuits($player_id);
+            $result['counts'][$player_id]['influence'] = $this->getPlayerInfluence($player_id);
         }
 
         $result['hand'] = $this->tokens->getTokensInLocation('hand_'.$current_player_id);
@@ -251,8 +253,8 @@ class paxpamir extends Table
         $influence = 1;
         $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
         for ($i = 0; $i < count($court_cards); $i++) {
-            $card_info = $this->token_types[$court_cards[$i]['key']];
-            $card_info['suit'] += $card_info['rank'];
+            // $card_info = $this->token_types[$court_cards[$i]['key']];
+            // $card_info['suit'] += $card_info['rank'];
         }
         return $influence;
     }
@@ -291,6 +293,8 @@ class paxpamir extends Table
             $counts[$player_id]['coins'] = $this->getPlayerCoins($player_id );
             $counts[$player_id]['tokens'] = count($this->tokens->getTokensOfTypeInLocation('token', 'tokens_'.$player_id ));
             $counts[$player_id]['cards'] = count($this->tokens->getTokensOfTypeInLocation('card', 'hand_'.$player_id ));
+            $counts[$player_id]['suits'] = $this->getPlayerSuits($player_id);
+            $counts[$player_id]['influence'] = $this->getPlayerInfluence($player_id);
         }
 
         self::notifyAllPlayers( "updatePlayerCounts", '', array(
@@ -438,6 +442,9 @@ class paxpamir extends Table
                 'court_cards' => $court_cards,
                 'i18n' => array( 'card_name' ),
             ) );
+
+            $this->updatePlayerCounts();
+            
         }
 
         if ($this->getGameStateValue("remaining_actions") > 0) {

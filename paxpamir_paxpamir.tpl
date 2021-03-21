@@ -111,6 +111,11 @@ var jstpl_player_board = '\<div id="p_board_${id}" class="p_board">\
     <div id="coins_${id}" class="coin_icon"><span id="coincount_${id}"  class="coincount">0</span></div>\
     <div id="tokens_${id}" class="token_icon" style="background-position:-${x}px 0"><span id="tokencount_${id}"  class="tokencount">0</span></div>\
     <div id="cards_${id}" class="card_icon"><span id="cardcount_${id}"  class="cardcount">0</span></div>\
+    <div id="suits_${id}">\
+        <div class="suit_icon economic"><span id="economic_${id}"  class="suitcount">0</span></div>\
+        <div class="suit_icon military"><span id="military_${id}"  class="suitcount">0</span></div>\
+        <div class="suit_icon political"><span id="political_${id}"  class="suitcount">0</span></div>\
+        <div class="suit_icon intelligence"><span id="intelligence_${id}"  class="suitcount">0</span></div>\
     </div>\
 </div>';
 var jstpl_loyalty_icon='<div id="loyalty_icon_${id}" class="loyalty_icon" style="background-position:-${x}px 0"> \

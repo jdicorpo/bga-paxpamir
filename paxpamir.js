@@ -86,9 +86,17 @@ function (dojo, declare) {
                     id: player_id,
                     x: x
                 }), playerBoardDiv);
+                
                 $('coincount_' + player_id).innerHTML = gamedatas.players[player_id].coins;
                 $('tokencount_' + player_id).innerHTML = gamedatas.counts[player_id].tokens;
                 $('cardcount_' + player_id).innerHTML = gamedatas.counts[player_id].cards;
+
+                $('economic_'+ player_id).innerHTML = gamedatas.counts[player_id].suits.economic;
+                $('military_'+ player_id).innerHTML = gamedatas.counts[player_id].suits.military;
+                $('political_'+ player_id).innerHTML = gamedatas.counts[player_id].suits.political;
+                $('intelligence_'+ player_id).innerHTML = gamedatas.counts[player_id].suits.intelligence;
+
+                $('influence_'+ player_id).innerHTML = gamedatas.counts[player_id].influence;
 
                 var loyalty = gamedatas.players[player_id].loyalty;
                 if (loyalty != "null") {
@@ -854,6 +862,13 @@ function (dojo, declare) {
                 $('coincount_' + player_id).innerHTML = notif.args.counts[player_id].coins;
                 $('tokencount_' + player_id).innerHTML = notif.args.counts[player_id].tokens;
                 $('cardcount_' + player_id).innerHTML = notif.args.counts[player_id].cards;
+
+                $('economic_'+ player_id).innerHTML = notif.args.counts[player_id].suits.economic;
+                $('military_'+ player_id).innerHTML = notif.args.counts[player_id].suits.military;
+                $('political_'+ player_id).innerHTML = notif.args.counts[player_id].suits.political;
+                $('intelligence_'+ player_id).innerHTML = notif.args.counts[player_id].suits.intelligence;
+
+                $('influence_'+ player_id).innerHTML = notif.args.counts[player_id].influence;
             };
         },
 
