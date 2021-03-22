@@ -311,6 +311,7 @@ $this->token_types = array(
   'name' => clienttranslate("Charles Stoddart"),
   'region' => 'kabul',
   'suit' => 'intelligence',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("intelligence"),
 ),
 'card_5' => array(
@@ -318,6 +319,7 @@ $this->token_types = array(
   'name' => clienttranslate("Shah Shujah Durrani"),
   'region' => 'kabul',
   'suit' => 'political',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("political"),
 ),
 'card_6' => array(
@@ -325,6 +327,7 @@ $this->token_types = array(
   'name' => clienttranslate("Aminullah Khan Logari"),
   'region' => 'kabul',
   'suit' => 'political',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("political"),
 ),
 'card_7' => array(
@@ -332,6 +335,7 @@ $this->token_types = array(
   'name' => clienttranslate("Dost Mohammad"),
   'region' => 'kabul',
   'suit' => 'political',
+  'rank' => 2,
   'tooltip_action' => clienttranslate("political"),
 ),
 'card_8' => array(
@@ -339,6 +343,7 @@ $this->token_types = array(
   'name' => clienttranslate("Kabul Bazaar"),
   'region' => 'kabul',
   'suit' => 'economic',
+  'rank' => 2,
   'tooltip_action' => clienttranslate("economic"),
 ),
 'card_9' => array(
@@ -346,6 +351,7 @@ $this->token_types = array(
   'name' => clienttranslate("Afghan Handicrafts"),
   'region' => 'kabul',
   'suit' => 'economic',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("economic"),
 ),
 'card_10' => array(
@@ -353,6 +359,7 @@ $this->token_types = array(
   'name' => clienttranslate("Balkh Arsenic Mine"),
   'region' => 'kabul',
   'suit' => 'economic',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("economic"),
 ),
 'card_11' => array(
@@ -360,6 +367,7 @@ $this->token_types = array(
   'name' => clienttranslate("Lapis Lazuli Mine"),
   'region' => 'kabul',
   'suit' => 'economic',
+  'rank' => 2,
   'tooltip_action' => clienttranslate("economic"),
 ),
 'card_12' => array(
@@ -367,6 +375,7 @@ $this->token_types = array(
   'name' => clienttranslate("City of Ghazni"),
   'region' => 'kabul',
   'suit' => 'economic',
+  'rank' => 3,
   'tooltip_action' => clienttranslate("economic"),
 ),
 'card_13' => array(
@@ -374,6 +383,7 @@ $this->token_types = array(
   'name' => clienttranslate("Ghilzai Nomads"),
   'region' => 'kabul',
   'suit' => 'economic',
+  'rank' => 2,
   'tooltip_action' => clienttranslate("economic"),
 ),
 'card_14' => array(
@@ -381,6 +391,7 @@ $this->token_types = array(
   'name' => clienttranslate("Money Lenders"),
   'region' => 'kabul',
   'suit' => 'economic',
+  'rank' => 2,
   'tooltip_action' => clienttranslate("economic"),
 ),
 'card_15' => array(
@@ -388,6 +399,7 @@ $this->token_types = array(
   'name' => clienttranslate("Durrani Royal Guard"),
   'region' => 'kabul',
   'suit' => 'military',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("military"),
 ),
 'card_16' => array(
@@ -395,6 +407,7 @@ $this->token_types = array(
   'name' => clienttranslate("Bala Hissar"),
   'region' => 'kabul',
   'suit' => 'military',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("military"),
 ),
 'card_17' => array(
@@ -402,6 +415,7 @@ $this->token_types = array(
   'name' => clienttranslate("Citadel of Ghazni"),
   'region' => 'kabul',
   'suit' => 'military',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("military"),
 ),
 'card_18' => array(
@@ -409,7 +423,7 @@ $this->token_types = array(
   'name' => clienttranslate("Harry Flashman"),
   'region' => 'punjab',
   'suit' => 'intelligence',
-  'impact' => '1',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("intelligence"),
 ),
 'card_19' => array(
@@ -417,7 +431,7 @@ $this->token_types = array(
   'name' => clienttranslate("Eldred Pottinger"),
   'region' => 'punjab',
   'suit' => 'intelligence',
-  'impact' => '1',
+  'rank' => 2,
   'tooltip_action' => clienttranslate("intelligence"),
 ),
 'card_20' => array(
@@ -425,7 +439,7 @@ $this->token_types = array(
   'name' => clienttranslate("Henry Rawlinson"),
   'region' => 'punjab',
   'suit' => 'intelligence',
-  'impact' => '1',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("intelligence"),
 ),
 'card_21' => array(
@@ -433,7 +447,7 @@ $this->token_types = array(
   'name' => clienttranslate("Alexander Burnes"),
   'region' => 'punjab',
   'suit' => 'intelligence',
-  'impact' => '2',
+  'rank' => 2,
   'tooltip_action' => clienttranslate("intelligence"),
 ),
 'card_22' => array(
@@ -441,7 +455,7 @@ $this->token_types = array(
   'name' => clienttranslate("George Hayward"),
   'region' => 'punjab',
   'suit' => 'intelligence',
-  'impact' => '1',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("intelligence"),
 ),
 'card_23' => array(
@@ -449,7 +463,7 @@ $this->token_types = array(
   'name' => clienttranslate("Henry Pottinger"),
   'region' => 'punjab',
   'suit' => 'intelligence',
-  'impact' => '1',
+  'rank' => 1,
   'tooltip_action' => clienttranslate("intelligence"),
 ),
 'card_24' => array(

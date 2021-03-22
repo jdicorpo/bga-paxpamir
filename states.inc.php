@@ -55,7 +55,7 @@ if (!defined('STATE_END_GAME')) { // ensure this block is only invoked once, sin
     define("STATE_PLAYER_ACTIONS", 3);
     define("STATE_DISCARD_COURT", 4);
     define("STATE_DISCARD_HAND", 5);
-    define("STATE_PROCESS_EVENT", 6);
+    define("STATE_RESOLVE_EVENT", 6);
     define("STATE_REFRESH_MARKET", 7);
     define("STATE_DOMINANCE_CHECK", 8);
     define("STATE_NEXT_PLAYER", 9);
@@ -99,50 +99,48 @@ $machinestates = array(
                 "action" => STATE_PLAYER_ACTIONS, 
                 "discard_court" => STATE_DISCARD_COURT, 
                 "discard_hand" => STATE_DISCARD_HAND, 
-                "clean_up" => STATE_REFRESH_MARKET, 
+                "refresh_market" => STATE_REFRESH_MARKET, 
             )
     ),
 
     STATE_DISCARD_COURT => array(
         "name" => "discardCourt",
-        "description" => clienttranslate('${actplayer} '),
-        "descriptionmyturn" => clienttranslate('${you} '),
+        "description" => clienttranslate('${actplayer} must discard court cards'),
+        "descriptionmyturn" => clienttranslate('${you} must discard '),
         "type" => "activeplayer",
         "args" => "argPlayerActions",
-        "possibleactions" => array( "purchase", "play", "card_action", "pass" ),
+        "possibleactions" => array( "discard" ),
         "transitions" => array( 
             "discard_court" => STATE_DISCARD_COURT, 
             "discard_hand" => STATE_DISCARD_HAND, 
-            "clean_up" => STATE_REFRESH_MARKET, 
+            "refresh_market" => STATE_REFRESH_MARKET, 
         )
     ),
 
     STATE_DISCARD_HAND => array(
         "name" => "discardHand",
-        "description" => clienttranslate('${actplayer} '),
-        "descriptionmyturn" => clienttranslate('${you} '),
+        "description" => clienttranslate('${actplayer} must discard hand cards'),
+        "descriptionmyturn" => clienttranslate('${you} must discard '),
         "type" => "activeplayer",
         "args" => "argPlayerActions",
-        "possibleactions" => array( "purchase", "play", "card_action", "pass" ),
+        "possibleactions" => array( "discard" ),
         "transitions" => array( 
             "discard_hand" => STATE_DISCARD_HAND, 
-            "clean_up" => STATE_REFRESH_MARKET, 
+            "refresh_market" => STATE_REFRESH_MARKET, 
         )
     ),
 
-    STATE_DISCARD_HAND => array(
-        "name" => "playerActions",
-        "description" => clienttranslate('${actplayer} '),
-        "descriptionmyturn" => clienttranslate('${you} '),
-        "type" => "activeplayer",
-        "args" => "argPlayerActions",
-        "possibleactions" => array( "purchase", "play", "card_action", "pass" ),
+    STATE_RESOLVE_EVENT => array(
+        "name" => "resolveEvent",
+        "type" => "game",
+        "action" => "stResolveEvent",
+        "updateGameProgression" => false,
         "transitions" => array( 
-            "action" => STATE_PLAYER_ACTIONS, 
-            "clean_up" => STATE_REFRESH_MARKET, 
+            "next_turn" => STATE_NEXT_PLAYER,
+            "refresh_market" => STATE_REFRESH_MARKET,
         )
-),
-    
+    ),
+
     STATE_REFRESH_MARKET => array(
         "name" => "refreshMarket",
         "type" => "game",
@@ -150,7 +148,7 @@ $machinestates = array(
         "updateGameProgression" => false,
         "transitions" => array( 
             "next_turn" => STATE_NEXT_PLAYER,
-            "clean_up" => STATE_REFRESH_MARKET,
+            "refresh_market" => STATE_REFRESH_MARKET,
         )
     ),
 

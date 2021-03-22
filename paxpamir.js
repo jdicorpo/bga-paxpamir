@@ -137,7 +137,7 @@ function (dojo, declare) {
             for( var player_id in gamedatas.players ) {
                 var id = 'court_' + player_id;
                 this.court[player_id] = new ebg.stock();
-                this.setup_cards(this.court[player_id], id, 'court');
+                this.setup_cards(this.court[player_id], id, 'court court_' + player_id);
 
                 for (var c in gamedatas.court[player_id]) {
                     this.placeCard(this.court[player_id], gamedatas.court[player_id][c]['key'], gamedatas.court[player_id][c]['state'] );
@@ -239,8 +239,13 @@ function (dojo, declare) {
             switch( stateName )
             {
             case 'playerActions':
+            case 'discardCourt':
+            case 'discardHand':
                 this.remaining_actions = args.args.remaining_actions;
                 this.unavailable_cards = args.args.unavailable_cards;
+                this.hand = args.args.hand;
+                this.court_cards = args.args.court;
+                this.suits = args.args.suits;
                 break;
             
             case 'dummmy':
@@ -297,6 +302,28 @@ function (dojo, declare) {
                         }
                         break;
 
+                    case 'discardCourt':
+                        this.num_discards = Object.keys(args.court).length - args.suits.political - 3;
+                        if (this.num_discards > 1) var cardmsg = _(' court cards '); else cardmsg = _(' court card');
+                        $('pagemaintitletext').innerHTML += '<span id="remaining_actions_value" style="font-weight:bold;color:#ED0023;">' 
+                                + this.num_discards + '</span>' + cardmsg;
+                        this.selectedAction = 'discard_court';
+                        this.updatePossibleCards();
+                        this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'blue' );
+                        dojo.addClass('confirm_btn', 'disabled');
+                        break;
+
+                    case 'discardHand':
+                        this.num_discards = Object.keys(args.hand).length - args.suits.intelligence - 2;
+                        if (this.num_discards > 1) var cardmsg = _(' hand cards '); else cardmsg = _(' hand card');
+                        $('pagemaintitletext').innerHTML += '<span id="remaining_actions_value" style="font-weight:bold;color:#ED0023;">' 
+                        + this.num_discards + '</span>' + cardmsg;
+                        this.selectedAction = 'discard_hand';
+                        this.updatePossibleCards();
+                        this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'blue' );
+                        dojo.addClass('confirm_btn', 'disabled');
+                        break;
+
                     case 'client_confirmPurchase':
                         this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'blue' );
                         this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
@@ -317,6 +344,12 @@ function (dojo, declare) {
                     case 'client_selectPlay':
                         this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
                         break;
+
+                    case 'client_confirmDiscard':
+                        this.addActionButton( 'confirm_btn', _('Confirm'), 'onConfirm', null, false, 'blue' );
+                        this.addActionButton( 'cancel_btn', _('Cancel'), 'onCancel', null, false, 'red' );
+                        break;
+
                     default:
                         break;
                 }
@@ -441,6 +474,18 @@ function (dojo, declare) {
 
         },
 
+        discardCard : function(id, from_location, order = null) {
+
+            console.log( 'discardCard' );
+
+            // if (this.card_tokens[id] !== null) 
+            //     this.card_tokens[id].removeAll();
+
+            from_location.removeFromStockById(id, 'discard');
+
+        },
+
+
         updatePossibleCards: function() {
 
             this.clearLastAction();
@@ -458,7 +503,15 @@ function (dojo, declare) {
                         }, this);
                     break;
                 case 'play':
+                case 'discard_hand':
                     dojo.query('.hand').forEach(
+                        function (node, index) {
+                            dojo.addClass(node, 'possibleCard');
+                            this.handles.push(dojo.connect(node,'onclick', this, 'onCard'));
+                        }, this);
+                    break;
+                case 'discard_court':
+                    dojo.query('.court_' + this.player_id).forEach(
                         function (node, index) {
                             dojo.addClass(node, 'possibleCard');
                             this.handles.push(dojo.connect(node,'onclick', this, 'onCard'));
@@ -602,11 +655,18 @@ function (dojo, declare) {
                         dojo.addClass(node, 'selected');
                         var card_id = 'card_' + this.selectedCard.split('_')[4];
                         this.setClientState("client_confirmPlay", { descriptionmyturn : "Select which side of court to play card:"});
-                        // this.ajaxcall( "/paxpamir/paxpamir/playCard.html", { 
-                        //     lock: true,
-                        //     card_id:card_id,
-                        //     left_side: true,
-                        // }, this, function( result ) {} );  
+                        break;
+                    
+                    case 'discard_hand':
+                    case 'discard_court':
+                        var node = $( card_id );
+                        dojo.toggleClass(node, 'selected');
+                        dojo.toggleClass(node, 'discard');
+                        if (dojo.query('.selected').length == this.num_discards) {
+                            dojo.removeClass('confirm_btn', 'disabled');
+                        } else {
+                            dojo.addClass('confirm_btn', 'disabled');
+                        }
                         break;
 
                     default:
@@ -632,13 +692,27 @@ function (dojo, declare) {
                     var card_id = 'card_' + this.selectedCard.split('_')[5];
                     this.ajaxcall( "/paxpamir/paxpamir/purchaseCard.html", { 
                         lock: true,
-                        card_id:card_id,
+                        card_id: card_id,
                     }, this, function( result ) {} );  
                     break;
                    
                 case 'pass':
                     this.ajaxcall( "/paxpamir/paxpamir/passAction.html", { 
                         lock: true,
+                    }, this, function( result ) {} ); 
+                    break;
+
+                case 'discard_hand':
+                case 'discard_court':
+                    var cards = '';
+                    dojo.query('.selected').forEach(
+                        function (item, index) {
+                            cards += ' card_' + item.id.split('_')[4];
+                        }, this);
+                    this.ajaxcall( "/paxpamir/paxpamir/discardCards.html", { 
+                        lock: true,
+                        cards: cards,
+                        from_hand: (this.selectedAction == 'discard_hand')
                     }, this, function( result ) {} ); 
                     break;
 
@@ -752,6 +826,9 @@ function (dojo, declare) {
             dojo.subscribe( 'playCard', this, "notif_playCard" );
             this.notifqueue.setSynchronous( 'playCard', 2000 );
 
+            dojo.subscribe( 'discardCard', this, "notif_discardCard" );
+            this.notifqueue.setSynchronous( 'discardCard', 500 );
+
             dojo.subscribe( 'refreshMarket', this, "notif_refreshMarket" );
             this.notifqueue.setSynchronous( 'refreshMarket', 500 );
             
@@ -820,7 +897,9 @@ function (dojo, declare) {
                         card.state );
                 }, this);
 
-            this.card_tokens[notif.args.card.key].removeAll();
+            // this.card_tokens[notif.args.card.key].removeAll();
+            if (this.card_tokens[notif.args.card.key] !== null) 
+                this.card_tokens[notif.args.card.key].removeAll();
 
             if (player_id == this.player_id) {
                 this.moveCard(notif.args.card.key, this.player_hand, this.court[player_id]);
@@ -829,6 +908,49 @@ function (dojo, declare) {
             }
 
             this.court[player_id].updateDisplay();
+
+        },
+
+        notif_discardCard: function( notif )
+        {
+            console.log( 'notif_discardCard' );
+            console.log( notif );
+
+            this.clearLastAction();
+            var player_id = notif.args.player_id;
+
+            if (notif.args.from == 'hand') {
+
+                this.discardCard(notif.args.card_id, this.player_hand);
+
+            } else {
+
+                this.discardCard(notif.args.card_id, this.court[player_id]);
+
+                notif.args.court_cards.forEach (
+                    function (card, index) {
+                        this.updateCard(
+                            this.court[player_id], 
+                            card.key,
+                            card.state );
+                    }, this);
+    
+                if (this.card_tokens[notif.args.card_id] !== null) 
+                    this.card_tokens[notif.args.card_id].removeAll();
+
+            }
+
+            // notif.args.court_cards.forEach (
+            //     function (card, index) {
+            //         this.updateCard(
+            //             this.court[player_id], 
+            //             card.key,
+            //             card.state );
+            //     }, this);
+
+            // this.card_tokens[notif.args.card.key].removeAll();
+
+            // this.court[player_id].updateDisplay();
 
         },
 

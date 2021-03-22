@@ -325,6 +325,26 @@ class paxpamir extends Table
 
     }
 
+    function checkDiscards( $player_id )
+    {
+        //
+        // check for extra cards in hand and court
+        //
+        $result = array();
+        $suits = $this->getPlayerSuits($player_id);
+        $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
+        $hand = $this->tokens->getTokensOfTypeInLocation('card', 'hand_'.$player_id, null, 'state');
+        
+        $result['court'] = count($court_cards) - $suits['political'] - 3;
+        $result['court'] = max($result['court'], 0);
+
+        $result['hand'] = count($hand) - $suits['intelligence'] - 2;
+        $result['hand'] = max($result['hand'], 0);
+
+        return $result;
+
+    }
+
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions
@@ -410,13 +430,17 @@ class paxpamir extends Table
         if ($this->getGameStateValue("remaining_actions") > 0) {
             $this->gamestate->nextState( 'action' );
         } else {
-            $this->gamestate->nextState( 'clean_up' );
+            $this->cleanup();
         }
 
     }
 
     function playCard( $card_id, $left_side = true )
     {
+        //
+        // play a card from hand into the court on either the left or right side
+        //
+
         self::checkAction( 'play' );
 
         $player_id = self::getActivePlayerId();
@@ -455,13 +479,36 @@ class paxpamir extends Table
         if ($this->getGameStateValue("remaining_actions") > 0) {
             $this->gamestate->nextState( 'action' );
         } else {
-            $this->gamestate->nextState( 'clean_up' );
+            $this->cleanup();
+        }
+
+    }
+
+    function cleanup( )
+    {
+        //
+        // go to the next state for cleanup:  either discard court, discard hand or refresh market
+        //
+
+        $player_id = self::getActivePlayerId();
+        $discards = $this->checkDiscards($player_id);
+
+        if ($discards['court'] > 0) {
+            $this->gamestate->nextState( 'discard_court' );
+        } elseif ($discards['hand'] > 0) {
+            $this->gamestate->nextState( 'discard_hand' );
+        } else {
+            $this->gamestate->nextState( 'refresh_market' );
         }
 
     }
 
     function passAction( )
     {
+        //
+        // pass remaining player actions
+        //
+
         self::checkAction( 'pass' );
 
         $player_id = self::getActivePlayerId();
@@ -480,12 +527,78 @@ class paxpamir extends Table
             ) );
         } 
 
-        $this->gamestate->nextState( 'clean_up' );
+        $this->cleanup();
         
+    }
+
+    function discardCards($cards, $from_hand )
+    {
+        self::checkAction( 'discard' );
+
+        $player_id = self::getActivePlayerId();
+        $discards = $this->checkDiscards($player_id);
+
+        if ($from_hand) {
+            if (count($cards) !== $discards['hand'])
+                throw new feException( "Incorrect number of discards" );
+
+            foreach ($cards as $card_id) {
+                $this->tokens->moveToken($card_id, 'discard');
+                $card_name = $this->token_types[$card_id]['name'];
+                $removed_card = $this->tokens->getTokenInfo($card_id);
+                $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
+
+                self::notifyAllPlayers( "discardCard", '${player_name} discarded ${card_name} from their hand.', array(
+                    'player_id' => $player_id,
+                    'player_name' => self::getActivePlayerName(),
+                    'card_name' => $card_name,
+                    'court_cards' => $court_cards,
+                    'card_id' => $card_id,
+                    'from' => 'hand'
+                ) );
+            }
+
+        } else {
+            if (count($cards) != $discards['court'])
+                throw new feException( "Incorrect number of discards" );
+
+            foreach ($cards as $card_id) {
+                $this->tokens->moveToken($card_id, 'discard');
+                $card_name = $this->token_types[$card_id]['name'];
+                $removed_card = $this->tokens->getTokenInfo($card_id);
+                $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
+                                
+                // slide card positions down to fill in gap
+                foreach ($court_cards as $c) {
+                    if ($c['state'] > $removed_card['state'])
+                        $this->tokens->setTokenState($c['key'], $c['state'] - 1);
+                }
+
+                $court_cards = $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state');
+
+                self::notifyAllPlayers( "discardCard", '${player_name} discarded ${card_name} from their court.', array(
+                    'player_id' => $player_id,
+                    'player_name' => self::getActivePlayerName(),
+                    'card_name' => $card_name,
+                    'court_cards' => $court_cards,
+                    'card_id' => $card_id,
+                    'from' => 'court'
+                ) );
+            }
+        }
+
+        $this->updatePlayerCounts();
+
+        $this->cleanup();
+
     }
 
     function chooseLoyalty( $coalition )
     {
+        //
+        // select starting loyalty during game setup
+        //
+
         self::checkAction( 'choose_loyalty' );
 
         $player_id = self::getActivePlayerId();
@@ -518,9 +631,14 @@ class paxpamir extends Table
 
     function argPlayerActions()
     {
+        $player_id = self::getActivePlayerId();
+
         return array(
             'remaining_actions' => $this->getGameStateValue("remaining_actions"),
             'unavailable_cards' => $this->getUnavailableCards(),
+            'hand' => $this->tokens->getTokensInLocation('hand_'.$player_id),
+            'court' => $this->tokens->getTokensOfTypeInLocation('card', 'court_'.$player_id, null, 'state'),
+            'suits' => $this->getPlayerSuits($player_id)
         );
     }
 
@@ -562,7 +680,7 @@ class paxpamir extends Table
                         'new_cards' => $new_cards,
                     ) );
             
-                    $this->gamestate->nextState( 'clean_up' );
+                    $this->gamestate->nextState( 'refresh_market' );
                     return;
                 }
             }
@@ -588,7 +706,7 @@ class paxpamir extends Table
                         'new_cards' => $new_cards,
                     ) );
             
-                    $this->gamestate->nextState( 'clean_up' );
+                    $this->gamestate->nextState( 'refresh_market' );
                     return;
                 }
             }

@@ -63,6 +63,23 @@
         self::ajaxResponse( );
     }
 
+    public function discardCards()
+    {
+        self::setAjaxMode();     
+        $cards_raw = self::getArg( "cards", AT_alphanum, true );
+        $from_hand = self::getArg( "from_hand", AT_bool, true );
+
+        $cards_raw = trim($cards_raw);
+
+        if( $cards_raw == '' )
+            $cards = array();
+        else
+            $cards = explode( ' ', $cards_raw );
+
+        $result = $this->game->discardCards($cards, $from_hand);
+        self::ajaxResponse( );
+    }
+
     public function chooseLoyalty()
     {
         self::setAjaxMode();     

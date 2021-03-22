@@ -41,26 +41,26 @@ border_kandahar_punjab|Kandahar-Punjab Border|border {'left' => 800, 'top' => 40
 |Mohan Lal|card court_card|kabul|intelligence|3|s,s,s|mv|1|ru|||
 |Jan-Fishan Khan|card court_card|kabul|intelligence|2|s,s,a,fm|ba,mv||ru|||
 |Prince Akbar Khan|card court_card|kabul|intelligence|2|s,s,a|ba|2||||
-|Charles Stoddart|card court_card|kabul|intelligence||||||||
-|Shah Shujah Durrani|card court_card|kabul|political||||||||
-|Aminullah Khan Logari|card court_card|kabul|political||||||||
-|Dost Mohammad|card court_card|kabul|political||||||||
-|Kabul Bazaar|card court_card|kabul|economic||||||||
-|Afghan Handicrafts|card court_card|kabul|economic||||||||
-|Balkh Arsenic Mine|card court_card|kabul|economic||||||||
-|Lapis Lazuli Mine|card court_card|kabul|economic||||||||
-|City of Ghazni|card court_card|kabul|economic||||||||
-|Ghilzai Nomads|card court_card|kabul|economic||||||||
-|Money Lenders|card court_card|kabul|economic||||||||
-|Durrani Royal Guard|card court_card|kabul|military||||||||
-|Bala Hissar|card court_card|kabul|military||||||||
-|Citadel of Ghazni|card court_card|kabul|military||||||||
-|Harry Flashman|card court_card|punjab|intelligence||1||||||
-|Eldred Pottinger|card court_card|punjab|intelligence||1||||||
-|Henry Rawlinson|card court_card|punjab|intelligence||1||||||
-|Alexander Burnes|card court_card|punjab|intelligence||2||||||
-|George Hayward|card court_card|punjab|intelligence||1||||||
-|Henry Pottinger|card court_card|punjab|intelligence||1||||||
+|Charles Stoddart|card court_card|kabul|intelligence|1|||||||
+|Shah Shujah Durrani|card court_card|kabul|political|1|||||||
+|Aminullah Khan Logari|card court_card|kabul|political|1|||||||
+|Dost Mohammad|card court_card|kabul|political|2|||||||
+|Kabul Bazaar|card court_card|kabul|economic|2|||||||
+|Afghan Handicrafts|card court_card|kabul|economic|1|||||||
+|Balkh Arsenic Mine|card court_card|kabul|economic|1|||||||
+|Lapis Lazuli Mine|card court_card|kabul|economic|2|||||||
+|City of Ghazni|card court_card|kabul|economic|3|||||||
+|Ghilzai Nomads|card court_card|kabul|economic|2|||||||
+|Money Lenders|card court_card|kabul|economic|2|||||||
+|Durrani Royal Guard|card court_card|kabul|military|1|||||||
+|Bala Hissar|card court_card|kabul|military|1|||||||
+|Citadel of Ghazni|card court_card|kabul|military|1|||||||
+|Harry Flashman|card court_card|punjab|intelligence|1|||||||
+|Eldred Pottinger|card court_card|punjab|intelligence|2|||||||
+|Henry Rawlinson|card court_card|punjab|intelligence|1|||||||
+|Alexander Burnes|card court_card|punjab|intelligence|2|||||||
+|George Hayward|card court_card|punjab|intelligence|1|||||||
+|Henry Pottinger|card court_card|punjab|intelligence|1|||||||
 |Ranjit Singh|card court_card|punjab|political|2|||||||
 |Josiah Harlan|card court_card|punjab|political|1|||||||
 |Paolo Avitabile|card court_card|punjab|political|1|||||||

@@ -537,5 +537,14 @@
 	box-shadow: 0px 0px 4px 4px blue !important;
 }
 
+.discard {
+    opacity: 0.5;
+}
+
+.disabled {
+    opacity: 0.5;
+    cursor: none;
+}
+
 
 
