@@ -37,6 +37,7 @@ class paxpamir extends Table
             "setup" => 10,
             "remaining_actions" => 11,
             "favored_suit" => 12,
+            "dominance_checks" => 13,
 
             //    "my_first_global_variable" => 10,
             //    "my_second_global_variable" => 11,
@@ -121,11 +122,15 @@ class paxpamir extends Table
         }
 
         $this->tokens->createTokensPack("coin_{INDEX}", "pool", 36);
+        $this->tokens->createTokensPack("afghan_{INDEX}", "pool", 12);
+        $this->tokens->createTokensPack("russian_{INDEX}", "pool", 12);
+        $this->tokens->createTokensPack("british_{INDEX}", "pool", 12);
 
         // Init global values with their initial values
         self::setGameStateInitialValue( 'setup', 1 );
         self::setGameStateInitialValue( 'remaining_actions', 2 );
         self::setGameStateInitialValue( 'favored_suit', 0 );
+        self::setGameStateInitialValue( 'dominance_checks', 0 );
         
         // Init game statistics
         // (note: statistics used in this file must be defined in your stats.inc.php file)
@@ -345,6 +350,43 @@ class paxpamir extends Table
 
     }
 
+    function dominanceCheck ()
+    {
+        //
+        // perform dominance check
+        //
+    }
+
+    function resolveEvent( $event )
+    {
+        // resolve effect of an event. $event will match one of the following:
+        //
+        //      favor_mililtary
+        //      new_tatics
+        //      embarassment_riches
+        //      kohinoor_recovered
+        //      disregard_customs
+        //      courtly_manners
+        //      failure_impress
+        //      rumor
+        //      riots_punjab
+        //      conflict_fatigue
+        //      riots_herat
+        //      nationalism
+        //      no_effect
+        //      public_withdrawl
+        //      riots_kabul
+        //      nation_building
+        //      riots_persia
+        //      persian_aristocracy
+        //      confidence_failure
+        //      persuasive_methods
+        //      favor_intelligence
+        //      pashtunwali_values
+        //      favor_political
+        //      rebuke
+
+    }
 
 //////////////////////////////////////////////////////////////////////////////
 //////////// Player actions

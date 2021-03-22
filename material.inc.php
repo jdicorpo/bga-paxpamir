@@ -1101,62 +1101,158 @@ $this->token_types = array(
 'card_105' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Favor Military', 'purchased' => 'New Tactics',
+  'discarded' => 'favor_mililtary', 'purchased' => 'new_tatics',
 ),
 'card_106' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Embarrassment of Riches', 'purchased' => 'Koh-i-noor Recovered',
+  'discarded' => 'embarassment_riches', 'purchased' => 'kohinoor_recovered',
 ),
 'card_107' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Disregard for Customs', 'purchased' => 'Courtly Manners',
+  'discarded' => 'disregard_customs', 'purchased' => 'courtly_manners',
 ),
 'card_108' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Failure to Impress', 'purchased' => 'Rumor',
+  'discarded' => 'failure_impress', 'purchased' => 'rumor',
 ),
 'card_109' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Riots in Punjab', 'purchased' => 'Conflict Fatigue',
+  'discarded' => 'riots_punjab', 'purchased' => 'conflict_fatigue',
 ),
 'card_110' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Riots in Herat', 'purchased' => 'Nationalism',
+  'discarded' => 'riots_herat', 'purchased' => 'nationalism',
 ),
 'card_111' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'No Effect', 'purchased' => 'Public Withdrawal',
+  'discarded' => 'no_effect', 'purchased' => 'public_withdrawal',
 ),
 'card_112' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Riots in Kabul', 'purchased' => 'Nation Building',
+  'discarded' => 'riots_kabul', 'purchased' => 'nation_building',
 ),
 'card_113' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Riots in Persia', 'purchased' => 'Backing of Persian Aristocracy',
+  'discarded' => 'riots_persia', 'purchased' => 'persian_aristocracy',
 ),
 'card_114' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Confidence Failure', 'purchased' => 'Other Persuasive Methods',
+  'discarded' => 'confidence_failure', 'purchased' => 'persuasive_methods',
 ),
 'card_115' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Favor Intelligence', 'purchased' => 'Pashtunwali Values',
+  'discarded' => 'favor_intelligence', 'purchased' => 'pashtunwali_values',
 ),
 'card_116' => array(
   'type' => 'card event_card',
   'name' => clienttranslate("Event Card"),
-  'discarded' => 'Favor Political', 'purchased' => 'Rebuke',
+  'discarded' => 'favor_political', 'purchased' => 'rebuke',
+),
+'favor_mililtary' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Favor Military"),
+),
+'new_tatics' => array(
+  'type' => 'event',
+  'name' => clienttranslate("New Tactics"),
+),
+'embarassment_riches' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Embarrassment of Riches"),
+),
+'kohinoor_recovered' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Koh-i-noor Recovered"),
+),
+'disregard_customs' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Disregard for Customs"),
+),
+'courtly_manners' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Courtly Manners"),
+),
+'failure_impress' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Failure to Impress"),
+),
+'rumor' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Rumor"),
+),
+'riots_punjab' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Riots in Punjab"),
+),
+'conflict_fatigue' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Conflict Fatigue"),
+),
+'riots_herat' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Riots in Herat"),
+),
+'nationalism' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Nationalism"),
+),
+'no_effect' => array(
+  'type' => 'event',
+  'name' => clienttranslate("No Effect"),
+),
+'public_withdrawl' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Public Withdrawal"),
+),
+'riots_kabul' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Riots in Kabul"),
+),
+'nation_building' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Nation Building"),
+),
+'riots_persia' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Riots in Persia"),
+),
+'persian_aristocracy' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Backing of Persian Aristocracy"),
+),
+'confidence_failure' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Confidence Failure"),
+),
+'persuasive_methods' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Other Persuasive Methods"),
+),
+'favor_intelligence' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Favor Intelligence"),
+),
+'pashtunwali_values' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Pashtunwali Values"),
+),
+'favor_political' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Favor Political"),
+),
+'rebuke' => array(
+  'type' => 'event',
+  'name' => clienttranslate("Rebuke"),
 ),
 // --- gen php end --- 
 );
